@@ -3,8 +3,8 @@ package activities;
 public class WorkActivity  extends Activity{
     private int dificultity;
 
-    public WorkActivity(int date, int duration, int satisfaction, String description, int dificultity) throws Exception {
-        super(date, duration, satisfaction, description);
+    public WorkActivity(int id, int date, int duration, int satisfaction, String description, int dificultity) throws Exception {
+        super(id, date, duration, satisfaction, description);
         boolean isValidDificultity = dificultity == 1 || dificultity == 2 || dificultity == 3;
         if (!isValidDificultity) throw new Exception("A dificuldade so pode ter valor 1, 2 ou 3");
         this.dificultity = dificultity;

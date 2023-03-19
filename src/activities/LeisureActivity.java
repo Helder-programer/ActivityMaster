@@ -2,8 +2,8 @@ package activities;
 
 public class LeisureActivity extends Activity{
 
-    public LeisureActivity(int date, int duration, int satisfaction, String description) throws Exception {
-        super(date, duration, satisfaction, description);
+    public LeisureActivity(int id, int date, int duration, int satisfaction, String description) throws Exception {
+        super(id, date, duration, satisfaction, description);
     }
     
     public int calculateEnergyExpense() {
