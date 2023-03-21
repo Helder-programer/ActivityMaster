@@ -3,8 +3,8 @@ package activities;
 public class PhysicalActivity extends Activity {
     private int intensivity;
 
-    public PhysicalActivity(int id, int date, int duration, int satisfaction, String description, int intensivity) throws Exception {
-        super(id, date, duration, satisfaction, description);
+    public PhysicalActivity(int date, int duration, int satisfaction, String description, int intensivity) throws Exception {
+        super(date, duration, satisfaction, description);
         boolean isValidIntensivity = intensivity == 2 || intensivity == 3 || intensivity == 4;
         if (!isValidIntensivity)
             throw new Exception("A intensidade so pode ter valor 2, 3 ou 4");
@@ -33,11 +33,11 @@ public class PhysicalActivity extends Activity {
 
     public String toString() {
         String data = "";
-        data += "id: " + this.getId() + "; ";
-        data += "data_realizacao: " + this.getDate() + "; ";
-        data += "duracao: " + this.getDuration() + "; ";
-        data += "descricao: " + this.getDescription() + "; ";
-        data += "Intensidade: " + this.getIntensivity() + "; ";
+        data += "DATA_REALIZACAO: " + this.getDate() + "; ";
+        data += "DURACAO: " + this.getDuration() + "; ";
+        data += "DESCRICAO: " + this.getDescription() + "; ";
+        data += "INTENSIDADE: " + this.getIntensivity() + "; ";
+        data += "TIPO DE ATIVIDADE: Física";
         return data;
     }
 
