@@ -7,9 +7,11 @@ public class PhysicalActivity extends Activity {
         super(date, duration, satisfaction, description);
         boolean isValidIntensivity = intensivity == 2 || intensivity == 3 || intensivity == 4;
         if (!isValidIntensivity)
-            throw new Exception("A intensidade so pode ter valor 2, 3 ou 4");
+            throw new Exception("A intensidade so pode ter valor 2, 3 ou 4!");
         this.intensivity = intensivity;
     }
+
+    public PhysicalActivity() {}
 
     @Override
     public int calculateEnergyExpense() {
@@ -19,7 +21,7 @@ public class PhysicalActivity extends Activity {
 
     @Override
     public double calculateWellBeing() {
-        double wellBeing = this.calculateEnergyExpense() * this.satisfaction / 360;
+        double wellBeing = (this.calculateEnergyExpense() * this.satisfaction) / 360;
         return wellBeing;
     }
 
@@ -27,18 +29,20 @@ public class PhysicalActivity extends Activity {
         return intensivity;
     }
 
+    
     public void setIntensivity(int intensivity) {
         this.intensivity = intensivity;
     }
 
+
+    @Override
     public String toString() {
         String data = "";
-        data += "DATA_REALIZACAO: " + this.getDate() + "; ";
-        data += "DURACAO: " + this.getDuration() + "; ";
-        data += "DESCRICAO: " + this.getDescription() + "; ";
-        data += "INTENSIDADE: " + this.getIntensivity() + "; ";
-        data += "TIPO DE ATIVIDADE: Física";
-        return data;
+        data += "INTENSIDADE: " + this.getIntensivity() + ";\n";
+        data += "TIPO DE ATIVIDADE: Física\n";
+        data += "GASTO DE ENERGIA: " + calculateEnergyExpense() + "\n";
+        data += "BEM-ESTAR: " + calculateWellBeing() + "\n";
+        return super.toString() + data;
     }
 
 }
