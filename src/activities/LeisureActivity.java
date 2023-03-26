@@ -1,8 +1,10 @@
 package activities;
 
+import java.time.LocalDate;
+
 public class LeisureActivity extends Activity {
 
-    public LeisureActivity(int date, int duration, int satisfaction, String description) throws Exception {
+    public LeisureActivity(LocalDate date, int duration, int satisfaction, String description) throws Exception {
         super(date, duration, satisfaction, description);
     }
 

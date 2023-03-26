@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ActivityManager {
     private List<Activity> database = new ArrayList<Activity>();
@@ -70,7 +72,7 @@ public class ActivityManager {
     private void addNewActivity() {
         int activityCategory = 0;
         Activity newActivity;
-        int activityDate = 0;
+        String dateText = "";
         int activityDuration = 0;
         int activitySatisfaction = 0;
         String activityDescription = "";
@@ -94,13 +96,16 @@ public class ActivityManager {
             }
 
             System.out.print("Digite a data da atividade: ");
-            activityDate = this.input.nextInt();
+            dateText = this.input.next();
             System.out.print("Digite a duracao da atividade: ");
             activityDuration = this.input.nextInt();
             System.out.print("Digite a satisfacao que voce teve na atividade: ");
             activitySatisfaction = this.input.nextInt();
             System.out.print("Digite a descricao da atividade: ");
             activityDescription = this.input.next();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate activityDate = LocalDate.parse(dateText, formatter);
 
             switch (activityCategory) {
                 case 1:
@@ -145,7 +150,7 @@ public class ActivityManager {
 
     private void updateActivity() {
         int activityId = 0;
-        int activityDate = 0;
+        String dateText = "";
         int activityDuration = 0;
         int activitySatisfaction = 0;
         String activityDescription = "";
@@ -160,13 +165,16 @@ public class ActivityManager {
 
             // Input Section
             System.out.print("Digite a data da atividade: ");
-            activityDate = this.input.nextInt();
+            dateText = this.input.next();
             System.out.print("Digite a duracao da atividade: ");
             activityDuration = this.input.nextInt();
             System.out.print("Digite a satisfacao que voce teve na atividade: ");
             activitySatisfaction = this.input.nextInt();
             System.out.print("Digite a descricao da atividade: ");
             activityDescription = this.input.next();
+
+            DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate activityDate = LocalDate.parse(dateText, date);
 
             if (this.database.get(activityId) instanceof PhysicalActivity) {
 
@@ -203,8 +211,8 @@ public class ActivityManager {
             int activityId = this.input.nextInt();
 
             activityId -= 1;
-
-            this.database.remove(activityId - 1);
+            
+            this.database.remove(activityId);
             System.out.print("ATIVIDADE REMOVIDA COM SUCESSO!");
         } catch (Exception error) {
             System.out.println("Erro: " + error + ". Voltando ao menu...");
@@ -226,6 +234,12 @@ public class ActivityManager {
             int chosenFilter = this.input.nextInt();
 
             switch (chosenFilter) {
+                case 1:
+                    filterAcvitiesPerDay();
+                    break;
+                case 3:
+                    filterActiviesPerMonth();
+                    break;
                 case 4:
                     filterWithCategories();
                     break;
@@ -274,7 +288,7 @@ public class ActivityManager {
                     System.out.println("Informe uma opcao valida");
             }
 
-            System.out.println("ATIVIDADES FILTRADAS");
+            System.out.println("ATIVIDADES FILTRADAS:\n");
             for (Activity activity : activitiesFilter) {
                 System.out.println(activity.toString());
             }
@@ -284,7 +298,77 @@ public class ActivityManager {
             this.input.nextLine();
             return;
         }
+    }
 
+    private void filterActiviesPerMonth() {
+        try {
+            double totalEnergyExpense = 0;
+            double totalWellbeing = 0;
+            System.out.println("***FILTRAR ATIVIDADES POR MES***");
+            System.out.println("Informe o mes pelo qual deseja filtrar:");
+            int mounth = this.input.nextInt();
+
+            for (Activity activity : this.database) {
+                boolean isEqualMonth = activity.getDateWithoutFormat().getMonthValue() == mounth;
+                if (isEqualMonth) {
+                    totalEnergyExpense += activity.calculateEnergyExpense();
+                    totalWellbeing += activity.calculateWellBeing();
+                    System.out.println(activity.toString());
+                }
+            }
+            System.out.println("Gasto de energia total: " + totalEnergyExpense);
+            System.out.println("Bem-estar total: " + totalWellbeing);
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            return;
+        }
+    }
+
+    private void filterAcvitiesPerDay() {
+        try {
+            double totalEnergyExpense = 0;
+            double totalWellbeing = 0;
+            System.out.println("***FILTRAR ATIVIDADES POR DIA***");
+            System.out.println("Informe o dia pelo qual deseja filtrar:");
+            int day = this.input.nextInt();
+            System.out.println("Informe o mes pelo qual deseja filtrar:");
+            int month = this.input.nextInt();
+
+            for (Activity activity : this.database) {
+                boolean isEqualDay = activity.getDateWithoutFormat().getDayOfMonth() == day
+                        && activity.getDateWithoutFormat().getMonthValue() == month;
+                if (isEqualDay) {
+                    totalEnergyExpense += activity.calculateEnergyExpense();
+                    totalWellbeing += activity.calculateWellBeing();
+                    System.out.println(activity.toString());
+                }                
+            }
+            System.out.println("Gasto de energia total: " + totalEnergyExpense);
+            System.out.println("Bem-estar total: " + totalWellbeing);
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            return;
+        }
+    }
+
+    private void filterAcvitiesPerWeek() {
+        try {
+            System.out.println("***FILTRAR ATIVIDADES POR MES***");
+            System.out.println("Informe o dia pelo qual deseja filtrar:");
+            int day = this.input.nextInt();
+            System.out.println("Informe o mes pelo qual deseja filtrar:");
+            int month = this.input.nextInt();
+
+            for (Activity activity : this.database) {
+                boolean isEqualDay = activity.getDateWithoutFormat().getDayOfMonth() == day && activity.getDateWithoutFormat().getMonthValue() == month;
+                if (isEqualDay)
+                    System.out.println(activity.toString());
+            }
+
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            return;
+        }
     }
 
     private void activitiesRanking() {
@@ -292,19 +376,18 @@ public class ActivityManager {
             System.out.println("***ATIVIDADES COM MAIS GASTO DE ENERGIA***");
             List<Activity> activityList = new ArrayList<Activity>();
             activityList = this.database;
-    
+
             Collections.sort(activityList);
             Collections.reverse(activityList);
-    
+
             System.out.println("TOP 3 ATIVIDADES COM MAIS GASTO DE");
-    
+
             for (int counter = 0; counter < 3; counter++) {
                 System.out.println(activityList.get(counter).toString());
             }
-        } catch(Exception error) {
+        } catch (Exception error) {
             System.out.println("Erro: Voce nao possui 3 atividades ou mais. Voltando ao menu...");
             return;
         }
-
     }
 }

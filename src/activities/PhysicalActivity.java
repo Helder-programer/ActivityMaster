@@ -1,9 +1,11 @@
 package activities;
 
+import java.time.LocalDate;
+
 public class PhysicalActivity extends Activity {
     private int intensivity;
 
-    public PhysicalActivity(int date, int duration, int satisfaction, String description, int intensivity) throws Exception {
+    public PhysicalActivity(LocalDate date, int duration, int satisfaction, String description, int intensivity) throws Exception {
         super(date, duration, satisfaction, description);
         boolean isValidIntensivity = intensivity == 2 || intensivity == 3 || intensivity == 4;
         if (!isValidIntensivity)
@@ -27,11 +29,6 @@ public class PhysicalActivity extends Activity {
 
     public int getIntensivity() {
         return intensivity;
-    }
-
-    
-    public void setIntensivity(int intensivity) {
-        this.intensivity = intensivity;
     }
 
 
