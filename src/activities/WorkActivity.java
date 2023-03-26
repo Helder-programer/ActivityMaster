@@ -7,15 +7,20 @@ public class WorkActivity  extends Activity{
 
     public WorkActivity(LocalDate date, int duration, int satisfaction, String description, int dificultity) throws Exception {
         super(date, duration, satisfaction, description);
+        setDificultity(dificultity);
+    }
+    
+    
+    public void setDificultity(int dificultity) throws Exception {
         boolean isValidDificultity = dificultity == 1 || dificultity == 2 || dificultity == 3;
         if (!isValidDificultity) throw new Exception("A dificuldade so pode ter valor 1, 2 ou 3!");
         this.dificultity = dificultity;
     }
- 
-    
+
+
     @Override
-    public int calculateEnergyExpense() {
-        int energyExpense = (this.duration * this.dificultity) * 2;
+    public double calculateEnergyExpense() {
+        double energyExpense = (this.duration * this.dificultity) * 2;
         return energyExpense;
     }
 
@@ -27,7 +32,7 @@ public class WorkActivity  extends Activity{
 
 
     public int getDificultity() {
-        return dificultity;
+        return this.dificultity;
     }
 
     @Override
@@ -35,8 +40,8 @@ public class WorkActivity  extends Activity{
         String data = "";
         data += "DIFICULDADE: " + this.getDificultity() + ";\n";
         data += "TIPO DE ATIVIDADE: Trabalho\n";
-        data += "GASTO DE ENERGIA: " + calculateEnergyExpense() + "\n";
-        data += "BEM-ESTAR: " + calculateWellBeing() + "\n";
+        data += "GASTO DE ENERGIA: " + this.calculateEnergyExpense() + "\n";
+        data += "BEM-ESTAR: " + String.format("%.2f", this.calculateWellBeing()) + "\n";
         return super.toString() + data;
     }
    

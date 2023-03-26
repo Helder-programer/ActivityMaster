@@ -1,5 +1,4 @@
 package activities;
-
 import java.time.LocalDate;
 
 public class LeisureActivity extends Activity {
@@ -9,7 +8,7 @@ public class LeisureActivity extends Activity {
     }
 
     @Override
-    public int calculateEnergyExpense() {
+    public double calculateEnergyExpense() {
         return this.duration;
     }
     
@@ -23,8 +22,8 @@ public class LeisureActivity extends Activity {
     public String toString() {
         String data = "";
         data += "TIPO DE ATIVIDADE: Lazer\n";
-        data += "GASTO DE ENERGIA: " + calculateEnergyExpense() + "\n";
-        data += "BEM-ESTAR: " + calculateWellBeing() + "\n";
+        data += "GASTO DE ENERGIA: " + this.calculateEnergyExpense() + "\n";
+        data += "BEM-ESTAR: " + String.format("%.2f", this.calculateWellBeing()) + "\n";
         return super.toString() + data;
     }
 

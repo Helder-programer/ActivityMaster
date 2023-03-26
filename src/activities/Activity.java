@@ -1,4 +1,5 @@
 package activities;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -9,20 +10,13 @@ public abstract class Activity implements Comparable {
     protected String description;
 
     public Activity(LocalDate date, int duration, int satisfaction, String description) throws Exception {
-        boolean isValidSatisfaction = satisfaction == 1 || satisfaction == -1;
-        boolean isValidDuration = duration > 0;
-        if (!isValidSatisfaction) throw new Exception("A satisfacao so pode ter valor de 1 ou -1!");
-        if (!isValidDuration) throw new Exception("A duracao deve ser maior do que 0!");
-        this.date = date;
-        this.duration = duration;
-        this.satisfaction = satisfaction;
-        this.description = description;
+        setDate(date);
+        setDuration(duration);
+        setSatisfaction(satisfaction);
+        setDescription(description);
     }
 
-    public Activity() {}
-
-
-    public abstract int calculateEnergyExpense();
+    public abstract double calculateEnergyExpense();
 
     public abstract double calculateWellBeing();
 
@@ -36,7 +30,6 @@ public abstract class Activity implements Comparable {
         return this.date;
     }
 
-
     public int getDuration() {
         return duration;
     }
@@ -49,11 +42,15 @@ public abstract class Activity implements Comparable {
         this.date = date;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(int duration) throws Exception {
+        boolean isValidDuration = duration > 0;
+        if (!isValidDuration) throw new Exception("A duracao deve ser maior do que 0!");
         this.duration = duration;
     }
 
-    public void setSatisfaction(int satisfaction) {
+    public void setSatisfaction(int satisfaction) throws Exception{
+        boolean isValidSatisfaction = satisfaction == 1 || satisfaction == -1;
+        if (!isValidSatisfaction) throw new Exception("A satisfacao so pode ter valor de 1 ou -1!");
         this.satisfaction = satisfaction;
     }
 
@@ -76,7 +73,7 @@ public abstract class Activity implements Comparable {
 
     @Override
     public int compareTo(Object activity) {
-        return this.calculateEnergyExpense() - ((Activity) activity).calculateEnergyExpense();
+        return Integer.parseInt("" + this.calculateEnergyExpense()) - Integer.parseInt("" + ((Activity) activity).calculateEnergyExpense());
     }
 
 }

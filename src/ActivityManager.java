@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.IsoFields;
 
 public class ActivityManager {
     private List<Activity> database = new ArrayList<Activity>();
@@ -156,7 +159,6 @@ public class ActivityManager {
         String activityDescription = "";
         int activityDificultity = 0;
         int activityIntensivity = 0;
-        Activity activity = new PhysicalActivity();
 
         try {
             System.out.println("Informe o id da atividade que deseja editar");
@@ -177,26 +179,31 @@ public class ActivityManager {
             LocalDate activityDate = LocalDate.parse(dateText, date);
 
             if (this.database.get(activityId) instanceof PhysicalActivity) {
-
                 System.out.print("Informe a intensidade da atividade: ");
                 activityIntensivity = this.input.nextInt();
-                activity = new PhysicalActivity(activityDate, activityDuration, activitySatisfaction,
+
+                Activity currentActivity = new PhysicalActivity(activityDate, activityDuration, activitySatisfaction,
                         activityDescription, activityIntensivity);
+                this.database.set(activityId, currentActivity);
 
             } else
 
             if (this.database.get(activityId) instanceof WorkActivity) {
-
                 System.out.print("Informe a dificuldade da atividade: ");
                 activityDificultity = this.input.nextInt();
-                activity = new WorkActivity(activityDate, activityDuration, activitySatisfaction,
+
+                Activity currentActivity = new WorkActivity(activityDate, activityDuration, activitySatisfaction,
                         activityDescription, activityDificultity);
+
+                this.database.set(activityId, currentActivity);
+
             } else {
-                activity = new LeisureActivity(activityDate, activityDuration, activitySatisfaction,
+                Activity currentActivity = new LeisureActivity(activityDate, activityDuration, activitySatisfaction,
                         activityDescription);
+
+                this.database.set(activityId, currentActivity);
             }
 
-            this.database.set(activityId, activity);
             System.out.println("ATIVIDADE EDITADA COM SUCESSO!");
         } catch (Exception error) {
             System.out.println("Erro: " + error + ". Voltando ao menu...");
@@ -211,7 +218,7 @@ public class ActivityManager {
             int activityId = this.input.nextInt();
 
             activityId -= 1;
-            
+
             this.database.remove(activityId);
             System.out.print("ATIVIDADE REMOVIDA COM SUCESSO!");
         } catch (Exception error) {
@@ -236,6 +243,9 @@ public class ActivityManager {
             switch (chosenFilter) {
                 case 1:
                     filterAcvitiesPerDay();
+                    break;
+                case 2:
+                    // filterAcvitiesPerWeek();
                     break;
                 case 3:
                     filterActiviesPerMonth();
@@ -307,9 +317,13 @@ public class ActivityManager {
             System.out.println("***FILTRAR ATIVIDADES POR MES***");
             System.out.println("Informe o mes pelo qual deseja filtrar:");
             int mounth = this.input.nextInt();
+            System.out.println("Informe o ano pelo qual deseja filtrar:");
+            int year = this.input.nextInt();
 
             for (Activity activity : this.database) {
-                boolean isEqualMonth = activity.getDateWithoutFormat().getMonthValue() == mounth;
+                boolean isEqualMonth = activity.getDateWithoutFormat().getMonthValue() == mounth
+                        && activity.getDateWithoutFormat().getYear() == year;
+
                 if (isEqualMonth) {
                     totalEnergyExpense += activity.calculateEnergyExpense();
                     totalWellbeing += activity.calculateWellBeing();
@@ -333,15 +347,19 @@ public class ActivityManager {
             int day = this.input.nextInt();
             System.out.println("Informe o mes pelo qual deseja filtrar:");
             int month = this.input.nextInt();
+            System.out.println("Informe o ano pelo qual deseja filtrar:");
+            int year = this.input.nextInt();
 
             for (Activity activity : this.database) {
                 boolean isEqualDay = activity.getDateWithoutFormat().getDayOfMonth() == day
-                        && activity.getDateWithoutFormat().getMonthValue() == month;
+                        && activity.getDateWithoutFormat().getMonthValue() == month
+                        && activity.getDateWithoutFormat().getYear() == year;
+
                 if (isEqualDay) {
                     totalEnergyExpense += activity.calculateEnergyExpense();
                     totalWellbeing += activity.calculateWellBeing();
                     System.out.println(activity.toString());
-                }                
+                }
             }
             System.out.println("Gasto de energia total: " + totalEnergyExpense);
             System.out.println("Bem-estar total: " + totalWellbeing);
@@ -351,25 +369,49 @@ public class ActivityManager {
         }
     }
 
-    private void filterAcvitiesPerWeek() {
-        try {
-            System.out.println("***FILTRAR ATIVIDADES POR MES***");
-            System.out.println("Informe o dia pelo qual deseja filtrar:");
-            int day = this.input.nextInt();
-            System.out.println("Informe o mes pelo qual deseja filtrar:");
-            int month = this.input.nextInt();
+    // private void filterAcvitiesPerWeek() {
+        // try {
+        //     System.out.println("***FILTRAR ATIVIDADES POR SEMANA***");
+        //     System.out.println("Informe a semana pela qual deseja filtrar:");
+        //     int week = this.input.nextInt();
+        //     System.out.println("Informe o ano pelo qual deseja filtrar:");
+        //     int year = this.input.nextInt();
 
-            for (Activity activity : this.database) {
-                boolean isEqualDay = activity.getDateWithoutFormat().getDayOfMonth() == day && activity.getDateWithoutFormat().getMonthValue() == month;
-                if (isEqualDay)
-                    System.out.println(activity.toString());
-            }
+        //     for (Activity activity : this.database) {
 
-        } catch (Exception error) {
-            System.out.println("Erro: " + error + ". Voltando ao menu...");
-            return;
-        }
-    }
+        //         // ZoneId zoneId = ZoneId.systemDefault();
+        //         // Date date = Date.from(activity.getDateWithoutFormat().atStartOfDay(zoneId).toInstant());
+
+        //         // Calendar calendar = Calendar.getInstance();
+        //         // calendar.setTime(date);
+
+        //         // System.out.println(calendar.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+
+        //         // System.out.print("\nConversion of LocalDate to java.util.Calendar is :- \n"
+        //         //         + date);
+
+        //         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        //         String dateText = activity.getDateWithoutFormat().format(formatter);
+        //         dateText += " 10:15:30 am -03:00";
+
+        //         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a z");
+                
+        //         ZonedDateTime date = ZonedDateTime.parse("2019-03-27 10:15:30 am -05:00", formatter);
+
+        //         System.out.println(date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+
+        //         // boolean isEqualWeek = calendar.getWeekYear() == week
+        //         //         && activity.getDateWithoutFormat().getYear() == year;
+
+        //         // if (isEqualWeek)
+        //         //     System.out.println(activity.toString());
+    //         }
+
+    //     } catch (Exception error) {
+    //         System.out.println("Erro: " + error + ". Voltando ao menu...");
+    //         return;
+    //     }
+    // }
 
     private void activitiesRanking() {
         try {
