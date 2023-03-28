@@ -5,7 +5,8 @@ import java.time.LocalDate;
 public class PhysicalActivity extends Activity {
     private int intensivity;
 
-    public PhysicalActivity(LocalDate date, int duration, int satisfaction, String description, int intensivity) throws Exception {
+    public PhysicalActivity(LocalDate date, int duration, int satisfaction, String description, int intensivity)
+            throws Exception {
         super(date, duration, satisfaction, description);
         setIntensivity(intensivity);
     }
@@ -38,7 +39,7 @@ public class PhysicalActivity extends Activity {
         String data = "";
         data += "INTENSIDADE: " + this.getIntensivity() + ";\n";
         data += "TIPO DE ATIVIDADE: Física\n";
-        data += "GASTO DE ENERGIA: " + this.calculateEnergyExpense() + "\n";
+        data += "GASTO DE ENERGIA: " + String.format("%.2f", this.calculateEnergyExpense()) + "\n";
         data += "BEM-ESTAR: " + String.format("%.2f", this.calculateWellBeing()) + "\n";
         return super.toString() + data;
     }
