@@ -106,7 +106,8 @@ public class ActivityManager {
             System.out.print("Digite a satisfacao que voce teve na atividade: ");
             activitySatisfaction = this.input.nextInt();
             System.out.print("Digite a descricao da atividade: ");
-            activityDescription = this.input.next();
+            this.input.nextLine();
+            activityDescription = this.input.nextLine();
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate activityDate = LocalDate.parse(dateText, formatter);
@@ -174,7 +175,8 @@ public class ActivityManager {
             System.out.print("Digite a satisfacao que voce teve na atividade: ");
             activitySatisfaction = this.input.nextInt();
             System.out.print("Digite a descricao da atividade: ");
-            activityDescription = this.input.next();
+            this.input.nextLine();
+            activityDescription = this.input.nextLine();
 
             DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate activityDate = LocalDate.parse(dateText, date);
