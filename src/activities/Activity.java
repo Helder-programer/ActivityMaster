@@ -73,7 +73,12 @@ public abstract class Activity implements Comparable {
 
     @Override
     public int compareTo(Object activity) {
-        return Integer.parseInt("" + this.calculateEnergyExpense()) - Integer.parseInt("" + ((Activity) activity).calculateEnergyExpense());
+        double firstValue = this.calculateEnergyExpense();
+        double secondValue = ((Activity) activity).calculateEnergyExpense();
+
+        if (firstValue > secondValue) return 1;
+        else if (firstValue < secondValue) return -1;
+        return 0;
     }
 
 }

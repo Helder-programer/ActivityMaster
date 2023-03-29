@@ -25,10 +25,11 @@ public class ActivityManager {
                 4-Deletar atividade;
                 5-Filtrar atividades;
                 6-Top 3 atividades com mais gasto de energia;
-                7-Sair
+                7-Incluir 07 atividades para teste
+                8-Sair
                 """;
 
-        while (chosenOption != 7) {
+        while (chosenOption != 8) {
             System.out.println(message);
             try {
                 chosenOption = this.input.nextInt();
@@ -56,6 +57,9 @@ public class ActivityManager {
                     this.activitiesRanking();
                     break;
                 case 7:
+                    this.addActivitiesToTest();
+                    break;
+                case 8:
                     System.out.println("Saindo...");
                     this.input.close();
                     break;
@@ -220,6 +224,8 @@ public class ActivityManager {
             System.out.print("ATIVIDADE REMOVIDA COM SUCESSO!");
         } catch (Exception error) {
             System.out.println("Erro: " + error + ". Voltando ao menu...");
+            input.nextLine();
+            return;
         }
     }
 
@@ -228,7 +234,7 @@ public class ActivityManager {
 
                 ***INFORME O FILTRO QUE DESEJAR FAZER***
                 1-Data
-                4-Categoria
+                2-Categoria
                 """;
 
         try {
@@ -271,7 +277,7 @@ public class ActivityManager {
             System.out.print("Ano: ");
             int finalYear = this.input.nextInt();
 
-            //Construtor utilizado para validar as datas inseridas
+            // Construtor utilizado para validar as datas inseridas
             LocalDate validDate = LocalDate.of(initialYear, initialMonth, initialDay);
             validDate = LocalDate.of(finalYear, finalMonth, finalDay);
 
@@ -356,6 +362,7 @@ public class ActivityManager {
             System.out.println("TOP 3 ATIVIDADES COM MAIS GASTO DE");
 
             for (int counter = 0; counter < 3; counter++) {
+                System.out.println("RANKING: " + (counter + 1));
                 System.out.println(activityList.get(counter).toString());
             }
         } catch (Exception error) {
@@ -363,4 +370,31 @@ public class ActivityManager {
             return;
         }
     }
+
+    private void addActivitiesToTest() {
+        try {
+            Activity activity01 = new PhysicalActivity(LocalDate.of(2023, 1, 1), 10, 1, "Correr", 2);
+            Activity activity02 = new LeisureActivity(LocalDate.of(2023, 1, 1), 50, 1, "Jogar bola");
+            Activity activity03 = new WorkActivity(LocalDate.of(2023, 2, 10), 50, 1, "Programar", 2);
+            Activity activity04 = new PhysicalActivity(LocalDate.of(2023, 1, 10), 50, 1, "Flexoes", 2);
+            Activity activity05 = new WorkActivity(LocalDate.of(2023, 3, 10), 50, 1, "Resolver bugs", 2);
+            Activity activity06 = new PhysicalActivity(LocalDate.of(2023, 3, 10), 50, 1, "Academia", 2);
+            Activity activity07 = new LeisureActivity(LocalDate.of(2023, 4, 5), 50, 1, "Jogar games");
+            this.database.add(activity01);
+            this.database.add(activity02);
+            this.database.add(activity03);
+            this.database.add(activity04);
+            this.database.add(activity05);
+            this.database.add(activity06);
+            this.database.add(activity07);
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            this.input.nextLine();
+            return;
+        }
+    }
+
+
+
+
 }
