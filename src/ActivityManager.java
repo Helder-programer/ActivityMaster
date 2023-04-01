@@ -166,8 +166,9 @@ public class ActivityManager {
             System.out.println("Informe o id da atividade que deseja editar");
             activityId = this.input.nextInt();
             activityId -= 1;
+            this.database.get(activityId);
 
-            // Input Section
+            // Sessão de inputs
             System.out.print("Digite a data da atividade: ");
             dateText = this.input.next();
             System.out.print("Digite a duracao da atividade: ");

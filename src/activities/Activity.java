@@ -80,5 +80,4 @@ public abstract class Activity implements Comparable {
         else if (firstValue < secondValue) return -1;
         return 0;
     }
-
 }

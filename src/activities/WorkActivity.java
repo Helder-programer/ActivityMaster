@@ -2,7 +2,7 @@ package activities;
 
 import java.time.LocalDate;
 
-public class WorkActivity  extends Activity{
+public class WorkActivity extends Activity {
     private int dificultity;
 
     public WorkActivity(LocalDate date, int duration, int satisfaction, String description, int dificultity) throws Exception {
