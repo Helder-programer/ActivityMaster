@@ -168,7 +168,7 @@ public class ActivityManager {
             activityId -= 1;
             this.database.get(activityId);
 
-            // Sessão de inputs
+
             System.out.print("Digite a data da atividade: ");
             dateText = this.input.next();
             System.out.print("Digite a duracao da atividade: ");
