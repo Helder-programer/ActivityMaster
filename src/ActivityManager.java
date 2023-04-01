@@ -210,7 +210,7 @@ public class ActivityManager {
             System.out.println("ATIVIDADE EDITADA COM SUCESSO!");
         } catch (Exception error) {
             System.out.println("Erro: " + error + ". Voltando ao menu...");
-            input.nextLine();
+            this.input.nextLine();
             return;
         }
     }
@@ -226,7 +226,7 @@ public class ActivityManager {
             System.out.print("ATIVIDADE REMOVIDA COM SUCESSO!");
         } catch (Exception error) {
             System.out.println("Erro: " + error + ". Voltando ao menu...");
-            input.nextLine();
+            this.input.nextLine();
             return;
         }
     }
@@ -262,6 +262,9 @@ public class ActivityManager {
     }
 
     private void filterActivitiesPerDate() {
+        double totalEnergyExpense = 0;
+        double totalWellBeing = 0;
+
         try {
             System.out.println("Informe da data inicial");
             System.out.print("Dia: ");
@@ -293,9 +296,16 @@ public class ActivityManager {
                         && (activityMonth >= initialMonth && activityMonth <= finalMonth)
                         && (activityYear >= initialYear && activityYear <= finalYear);
 
-                if (isMatchedActvity)
+                if (isMatchedActvity) {
                     System.out.println(activity.toString());
+                    totalEnergyExpense += activity.calculateEnergyExpense();
+                    totalWellBeing += activity.calculateWellBeing();
+                }
             }
+
+
+            System.out.println("\n\nGASTO DE ENERGIA TOTAL: " + totalEnergyExpense);
+            System.out.println("BEM-ESTAR TOTAL: " + totalWellBeing);
 
         } catch (Exception error) {
             System.out.println("Erro: " + error + ". Voltando ao menu...");
@@ -395,8 +405,5 @@ public class ActivityManager {
             return;
         }
     }
-
-
-
 
 }

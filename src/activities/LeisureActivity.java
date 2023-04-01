@@ -22,8 +22,8 @@ public class LeisureActivity extends Activity {
     public String toString() {
         String data = "";
         data += "TIPO DE ATIVIDADE: Lazer\n";
-        data += "GASTO DE ENERGIA: " + String.format("%.2f", this.calculateEnergyExpense()) + "\n";
-        data += "BEM-ESTAR: " + String.format("%.2f", this.calculateWellBeing()) + "\n";
+        data += "GASTO DE ENERGIA: " + this.calculateEnergyExpense() + "\n";
+        data += "BEM-ESTAR: " + this.calculateWellBeing() + "\n";
         return super.toString() + data;
     }
 

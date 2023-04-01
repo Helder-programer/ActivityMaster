@@ -41,7 +41,7 @@ public class WorkActivity  extends Activity{
         data += "DIFICULDADE: " + this.getDificultity() + ";\n";
         data += "TIPO DE ATIVIDADE: Trabalho\n";
         data += "GASTO DE ENERGIA: " + String.format("%.2f", this.calculateEnergyExpense()) + "\n";
-        data += "BEM-ESTAR: " + String.format("%.2f", this.calculateWellBeing()) + "\n";
+        data += "BEM-ESTAR: " + this.calculateWellBeing() + "\n";
         return super.toString() + data;
     }
    

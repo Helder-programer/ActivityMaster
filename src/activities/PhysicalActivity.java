@@ -39,8 +39,8 @@ public class PhysicalActivity extends Activity {
         String data = "";
         data += "INTENSIDADE: " + this.getIntensivity() + ";\n";
         data += "TIPO DE ATIVIDADE: Física\n";
-        data += "GASTO DE ENERGIA: " + String.format("%.2f", this.calculateEnergyExpense()) + "\n";
-        data += "BEM-ESTAR: " + String.format("%.2f", this.calculateWellBeing()) + "\n";
+        data += "GASTO DE ENERGIA: " + this.calculateEnergyExpense() + "\n";
+        data += "BEM-ESTAR: " + this.calculateWellBeing() + "\n";
         return super.toString() + data;
     }
 
