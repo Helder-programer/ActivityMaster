@@ -1,5 +1,7 @@
-package activities;
+package models.leisureActivity;
 import java.time.LocalDate;
+
+import models.activity.Activity;
 
 public class LeisureActivity extends Activity {
 

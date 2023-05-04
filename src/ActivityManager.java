@@ -1,7 +1,8 @@
-import activities.Activity;
-import activities.LeisureActivity;
-import activities.PhysicalActivity;
-import activities.WorkActivity;
+import models.activity.Activity;
+import models.leisureActivity.LeisureActivity;
+import models.physicalActivity.PhysicalActivity;
+import models.workActivity.WorkActivity;
+
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;

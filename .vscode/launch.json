@@ -9,6 +9,13 @@
             "name": "App",
             "request": "launch",
             "mainClass": "App",
+            "projectName": "ActivityMaster_7cdf7752"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
             "projectName": "TaskMaster_454c31c8"
         },
         {

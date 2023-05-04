@@ -1,6 +1,8 @@
-package activities;
+package models.workActivity;
 
 import java.time.LocalDate;
+
+import models.activity.Activity;
 
 public class WorkActivity extends Activity {
     private int dificultity;

@@ -1,6 +1,8 @@
-package activities;
+package models.physicalActivity;
 
 import java.time.LocalDate;
+
+import models.activity.Activity;
 
 public class PhysicalActivity extends Activity {
     private int intensivity;
