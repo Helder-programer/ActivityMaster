@@ -7,8 +7,7 @@ import models.activity.Activity;
 public class PhysicalActivity extends Activity {
     private int intensivity;
 
-    public PhysicalActivity(LocalDate date, int duration, int satisfaction, String description, int intensivity)
-            throws Exception {
+    public PhysicalActivity(LocalDate date, int duration, int satisfaction, String description, int intensivity) throws Exception {
         super(date, duration, satisfaction, description);
         setIntensivity(intensivity);
     }

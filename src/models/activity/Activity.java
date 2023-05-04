@@ -4,10 +4,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public abstract class Activity implements Comparable {
+    protected int id;
     protected LocalDate date;
     protected int duration;
     protected int satisfaction;
     protected String description;
+    protected int owner;
 
     public Activity(LocalDate date, int duration, int satisfaction, String description) throws Exception {
         setDate(date);
@@ -19,6 +21,14 @@ public abstract class Activity implements Comparable {
     public abstract double calculateEnergyExpense();
 
     public abstract double calculateWellBeing();
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -61,7 +71,15 @@ public abstract class Activity implements Comparable {
     public String getDescription() {
         return description;
     }
+    
+    public int getOwner() {
+        return owner;
+    }
 
+    public void setOwner(int owner) {
+        this.owner = owner;
+    }
+    
     public String toString() {
         String data = "";
         data += "DATA_REALIZACAO: " + this.getDate() + ";\n";
@@ -80,4 +98,5 @@ public abstract class Activity implements Comparable {
         else if (firstValue < secondValue) return -1;
         return 0;
     }
+
 }
