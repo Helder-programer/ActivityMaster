@@ -1,22 +1,14 @@
 package models.activity;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-public abstract class Activity implements Comparable {
+public abstract class Activity implements Comparable<Activity> {
     protected int id;
-    protected LocalDate date;
+    protected Calendar date;
     protected int duration;
     protected int satisfaction;
     protected String description;
     protected int owner;
-
-    public Activity(LocalDate date, int duration, int satisfaction, String description) throws Exception {
-        setDate(date);
-        setDuration(duration);
-        setSatisfaction(satisfaction);
-        setDescription(description);
-    }
 
     public abstract double calculateEnergyExpense();
 
@@ -31,12 +23,12 @@ public abstract class Activity implements Comparable {
     }
 
     public String getDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String date = this.date.format(formatter);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String date = formatter.format(this.date);
         return date;
     }
 
-    public LocalDate getDateWithoutFormat() {
+    public Calendar getDateWithoutFormat() {
         return this.date;
     }
 
@@ -48,7 +40,7 @@ public abstract class Activity implements Comparable {
         return satisfaction;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
@@ -90,9 +82,9 @@ public abstract class Activity implements Comparable {
     }
 
     @Override
-    public int compareTo(Object activity) {
+    public int compareTo(Activity activity) {
         double firstValue = this.calculateEnergyExpense();
-        double secondValue = ((Activity) activity).calculateEnergyExpense();
+        double secondValue = (activity).calculateEnergyExpense();
 
         if (firstValue > secondValue) return 1;
         else if (firstValue < secondValue) return -1;

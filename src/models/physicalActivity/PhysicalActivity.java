@@ -1,16 +1,8 @@
 package models.physicalActivity;
-
-import java.time.LocalDate;
-
 import models.activity.Activity;
 
 public class PhysicalActivity extends Activity {
     private int intensivity;
-
-    public PhysicalActivity(LocalDate date, int duration, int satisfaction, String description, int intensivity) throws Exception {
-        super(date, duration, satisfaction, description);
-        setIntensivity(intensivity);
-    }
 
     public void setIntensivity(int intensivity) throws Exception {
         boolean isValidIntensivity = intensivity == 2 || intensivity == 3 || intensivity == 4;

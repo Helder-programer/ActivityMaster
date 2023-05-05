@@ -1,7 +1,6 @@
 package models.leisureActivity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 import config.ConnectionFactory;
 import models.activity.Activity;
@@ -15,16 +14,21 @@ public class LeisureActivityDAO extends ActivityDAO {
     }
 
     @Override
-    public void create(Activity activity) throws SQLException {
+    public void create(Activity activity) throws Exception {
         super.create(activity);
         PreparedStatement statement = this.connection.prepareStatement("INSERT INTO TAB_ATIVIDADES_LAZER VALUES (?)");
-        statement.setInt(1, activity.getId());
+        statement.setInt(1, super.getLastID());
         statement.execute();
         statement.close();
     }
 
     @Override
-    public void update(Activity activity) throws SQLException {
+    public void update(Activity activity) throws Exception {
         super.update(activity);
+    }
+
+    @Override
+    public void delete(Activity activity) throws Exception {
+        super.delete(activity);
     }
 }

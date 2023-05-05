@@ -1,17 +1,8 @@
 package models.workActivity;
-
-import java.time.LocalDate;
-
 import models.activity.Activity;
 
 public class WorkActivity extends Activity {
     private int dificultity;
-
-    public WorkActivity(LocalDate date, int duration, int satisfaction, String description, int dificultity) throws Exception {
-        super(date, duration, satisfaction, description);
-        setDificultity(dificultity);
-    }
-    
     
     public void setDificultity(int dificultity) throws Exception {
         boolean isValidDificultity = dificultity == 1 || dificultity == 2 || dificultity == 3;

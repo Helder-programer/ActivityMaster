@@ -1,13 +1,8 @@
 package models.leisureActivity;
-import java.time.LocalDate;
 
 import models.activity.Activity;
 
 public class LeisureActivity extends Activity {
-
-    public LeisureActivity(LocalDate date, int duration, int satisfaction, String description) throws Exception {
-        super(date, duration, satisfaction, description);
-    }
 
     @Override
     public double calculateEnergyExpense() {
