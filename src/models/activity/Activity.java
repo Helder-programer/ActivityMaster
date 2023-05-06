@@ -24,7 +24,7 @@ public abstract class Activity implements Comparable<Activity> {
 
     public String getDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String date = formatter.format(this.date);
+        String date = formatter.format(this.date.getTime());
         return date;
     }
 
@@ -71,9 +71,11 @@ public abstract class Activity implements Comparable<Activity> {
     public void setOwner(int owner) {
         this.owner = owner;
     }
-    
+
+    @Override
     public String toString() {
         String data = "";
+        data += "ID: " + this.getId() + ";\n";
         data += "DATA_REALIZACAO: " + this.getDate() + ";\n";
         data += "DURACAO: " + this.getDuration() + ";\n";
         data += "SATISFACAO: " + this.getSatisfaction() + ";\n";

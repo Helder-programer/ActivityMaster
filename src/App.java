@@ -1,8 +1,6 @@
-
-
 public class App {
     public static void main(String[] args) {
-        TestActivities testActivities = new TestActivities();
-        testActivities.add();   
+        ActivityManager activityManager = new ActivityManager();
+        activityManager.init();
     }
 }
