@@ -24,24 +24,25 @@ public class UserDAO {
         statement.close();
     }
 
-    public boolean login(User user) throws Exception {
-        String sql = "SELECT NOM_USUARIO, DES_SENHA FROM TAB_USUARIOS";
+    public boolean authenticate(User user) throws Exception {
+        String sql = "SELECT COD_USUARIO, NOM_USUARIO, DES_SENHA FROM TAB_USUARIOS";
         PreparedStatement statement = this.connection.prepareStatement(sql);
 
         ResultSet resultSet = statement.executeQuery();
 
         while (resultSet.next()) {
-            String nameTocompare = resultSet.getString(1);
-            String passwordToCompare = resultSet.getString(2);
+            String nameTocompare = resultSet.getString(2);
+            String passwordToCompare = resultSet.getString(3);
 
             boolean isAuthenticated = (user.getUsername().equals(nameTocompare) && user.getPassword().equals(passwordToCompare));
 
             if (isAuthenticated) {
+                user.setId(resultSet.getInt(1));
                 System.out.println("Autenticado!");
                 return true;
             }
         }
-        
+
         System.out.println("Login e/ou senha incorretos!");
 
         resultSet.close();

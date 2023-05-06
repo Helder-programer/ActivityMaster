@@ -14,6 +14,30 @@ public abstract class Activity implements Comparable<Activity> {
 
     public abstract double calculateWellBeing();
 
+
+    
+
+    public Activity(int id, Calendar date, int duration, int satisfaction, String description, int owner) throws Exception {
+        this.setId(id);
+        this.setDate(date);
+        this.setDuration(duration);
+        this.setSatisfaction(satisfaction);
+        this.setDescription(description);
+        this.setOwner(owner);
+    }
+
+
+    public Activity() {}
+    
+
+    public Activity(Calendar date, int duration, int satisfaction, String description, int owner) throws Exception {
+        this.setDate(date);
+        this.setDuration(duration);
+        this.setSatisfaction(satisfaction);
+        this.setDescription(description);
+        this.setOwner(owner);
+    }
+
     public int getId() {
         return this.id;
     }

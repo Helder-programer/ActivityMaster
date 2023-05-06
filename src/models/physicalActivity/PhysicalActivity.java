@@ -1,8 +1,24 @@
 package models.physicalActivity;
+import java.util.Calendar;
+
 import models.activity.Activity;
 
 public class PhysicalActivity extends Activity {
     private int intensivity;
+    
+
+    public PhysicalActivity(int id, Calendar date, int duration, int satisfaction, String description, int owner, int intensivity) throws Exception {
+        super(id, date, duration, satisfaction, description, owner);
+        this.setIntensivity(intensivity);
+    }
+    
+    public PhysicalActivity() {}
+
+    public PhysicalActivity(Calendar date, int duration, int satisfaction, String description, int owner, int intensivity) throws Exception {
+        super(date, duration, satisfaction, description, owner);
+        this.setIntensivity(intensivity);
+    }
+
 
     public void setIntensivity(int intensivity) throws Exception {
         boolean isValidIntensivity = intensivity == 2 || intensivity == 3 || intensivity == 4;
