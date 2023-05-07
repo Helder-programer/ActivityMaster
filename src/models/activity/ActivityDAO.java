@@ -36,7 +36,7 @@ public abstract class ActivityDAO {
         statement.setInt(4, activity.getSatisfaction());
         statement.setString(5, activity.getDescription());
         statement.setInt(6, 1);
-        
+
         statement.execute();
         statement.close();
     }
@@ -46,7 +46,7 @@ public abstract class ActivityDAO {
         int lastID = 0;
         PreparedStatement statement = this.connection.prepareStatement(sql);
         ResultSet resultSet = statement.executeQuery();
-        
+
         while (resultSet.next()) {
             lastID = resultSet.getInt(1);
         }
@@ -54,7 +54,17 @@ public abstract class ActivityDAO {
     }
 
     public void update(Activity activity) throws Exception {
-        
+        String sql = """
+                UPDATE TAB_ATIVIDADES SET
+                DTA_REALIZACAO = ?,
+                VAL_DURACAO = ?,
+                VAL_SATISFACAO = ?,
+                DES_ATIVIDADE = ?
+                WHERE COD_ATIVIDADE = ?
+                """;
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.execute();
+        statement.close();
     }
 
     public void delete(Activity activity) throws Exception {
@@ -65,20 +75,19 @@ public abstract class ActivityDAO {
         statement.close();
     }
 
-
     public List<Activity> findById() {
         List<Activity> activities = new ArrayList<Activity>();
         return activities;
     }
-    
+
     public List<Activity> findByDate() {
         List<Activity> activities = new ArrayList<Activity>();
         return activities;
     }
-    
+
     public void closeConnection() throws Exception {
         this.connection.close();
     }
-    
+
     public abstract List<Activity> findAll() throws Exception;
 }

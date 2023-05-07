@@ -33,6 +33,16 @@ public class WorkActivityDAO extends ActivityDAO {
     }
 
     @Override
+    public void update(Activity activity) throws Exception {
+        super.update(activity);
+        String sql = "UPDATE TAB_ATIVIDADES_TRABALHO SET VAL_DIFICULDADE = ? WHERE COD_ATIVIDADE = ?";
+
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.execute();
+        statement.close();
+    }
+
+    @Override
     public void delete(Activity activity) throws Exception {
         super.delete(activity);
     }
