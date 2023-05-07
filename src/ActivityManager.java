@@ -1,15 +1,17 @@
 import models.activity.Activity;
-import models.leisureActivity.LeisureActivity;
-import models.leisureActivity.LeisureActivityDAO;
 import models.physicalActivity.PhysicalActivity;
-import models.physicalActivity.PhysicalActivityDAO;
 import models.user.User;
-import models.user.UserDAO;
 import models.workActivity.WorkActivity;
-import models.workActivity.WorkActivityDAO;
 
 import java.util.List;
 import java.util.Scanner;
+
+import controllers.ActivityController;
+import controllers.LeisureActivityController;
+import controllers.PhysicalActivityController;
+import controllers.UserController;
+import controllers.WorkActivityController;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -19,6 +21,12 @@ import java.time.format.DateTimeFormatter;
 public class ActivityManager {
     private User user;
     private Scanner input = new Scanner(System.in);
+    private LeisureActivityController leisureActivityController = new LeisureActivityController();
+    private PhysicalActivityController physicalActivityController = new PhysicalActivityController();
+    private WorkActivityController workActivityController  = new WorkActivityController();
+    private UserController userController = new UserController();
+    private ActivityController activityController = new ActivityController();
+    
 
     private void menu() {
         int chosenOption = 0;
@@ -47,11 +55,11 @@ public class ActivityManager {
                 case 1:
                     this.addNewActivity();
                     break;
-                case 3:
-                    // this.updateActivity();
-                    break;
                 case 2:
                     // this.showAllActivities();
+                    break;
+                case 3:
+                    this.updateActivity();
                     break;
                 case 4:
                     // this.removeActivity();
@@ -62,7 +70,7 @@ public class ActivityManager {
                 case 6:
                     // this.activitiesRanking();
                     break;
-                case 8:
+                case 7:
                     System.out.println("Saindo...");
                     this.input.close();
                     break;
@@ -84,14 +92,17 @@ public class ActivityManager {
                 System.out.print("Digite a senha: ");
                 String password = this.input.next();
 
-                User userToLogin = new User(username, password);
-                UserDAO userDAO = new UserDAO();
+                User userToLogin = userController.login(username, password);
 
-                if (userDAO.authenticate(userToLogin)) {
+                if (userToLogin != null) {
+                    System.out.println("Autenticado!");
                     this.user = userToLogin;
                     this.menu();
                     break;
                 }
+
+                System.out.println("Usuario e/ou senha incorretos!");
+
             }
         } catch (Exception error) {
             System.out.println(error);
@@ -101,7 +112,6 @@ public class ActivityManager {
 
     private void addNewActivity() {
         int activityCategory = 0;
-        Activity newActivity;
         String dateText = "";
         int activityDuration = 0;
         int activitySatisfaction = 0;
@@ -146,24 +156,15 @@ public class ActivityManager {
                 case 1:
                     System.out.print("Informe a intensidade da atividade: ");
                     int activityIntensivity = this.input.nextInt();
-                    newActivity = new PhysicalActivity(activityDate, activityDuration, activitySatisfaction, activityDescription, activityIntensivity, this.user.getId());
-
-                    PhysicalActivityDAO physicalActivityDAO = new PhysicalActivityDAO();
-                    physicalActivityDAO.create(newActivity);
+                    physicalActivityController.create(activityDate, activityDuration, activitySatisfaction, activityDescription, activityIntensivity, this.user.getId());
                     break;
                 case 2:
-                    newActivity = new LeisureActivity(activityDate, activityDuration, activitySatisfaction, activityDescription, this.user.getId());
-
-                    LeisureActivityDAO leisureActivityDAO = new LeisureActivityDAO();
-                    leisureActivityDAO.create(newActivity);
+                    leisureActivityController.create(activityDate, activityDuration, activitySatisfaction, activityDescription, this.user.getId());
                     break;
                 case 3:
                     System.out.print("Informe a dificuldade da atividade: ");
                     int activityDificultity = this.input.nextInt();
-                    newActivity = new WorkActivity(activityDate, activityDuration, activitySatisfaction, activityDescription, activityDificultity, this.user.getId());
-
-                    WorkActivityDAO workActivityDAO = new WorkActivityDAO();
-                    workActivityDAO.create(newActivity);
+                    workActivityController.create(activityDate, activityDuration, activitySatisfaction, activityDescription, activityDificultity, this.user.getId());
                     break;
             }
             System.out.print("ATIVIDADE CADASTRADA COM SUCESSO!");
@@ -184,70 +185,62 @@ public class ActivityManager {
     // }
     // }
 
-    // private void updateActivity() {
-    // int activityId = 0;
-    // String dateText = "";
-    // int activityDuration = 0;
-    // int activitySatisfaction = 0;
-    // String activityDescription = "";
-    // int activityDificultity = 0;
-    // int activityIntensivity = 0;
+    private void updateActivity() {
+        int activityId = 0;
+        String dateText = "";
+        int activityDuration = 0;
+        int activitySatisfaction = 0;
+        String activityDescription = "";
+        int activityDificultity = 0;
+        int activityIntensivity = 0;
 
-    // try {
-    // System.out.println("Informe o id da atividade que deseja editar");
-    // activityId = this.input.nextInt();
-    // activityId -= 1;
-    // this.database.get(activityId);
+        try {
+            System.out.println("Informe o id da atividade que deseja editar");
+            activityId = this.input.nextInt();
 
-    // System.out.print("Digite a data da atividade: ");
-    // dateText = this.input.next();
-    // System.out.print("Digite a duracao da atividade: ");
-    // activityDuration = this.input.nextInt();
-    // System.out.print("Digite a satisfacao que voce teve na atividade: ");
-    // activitySatisfaction = this.input.nextInt();
-    // System.out.print("Digite a descricao da atividade: ");
-    // this.input.nextLine();
-    // activityDescription = this.input.nextLine();
+            System.out.print("Digite a data da atividade: ");
+            dateText = this.input.next();
+            System.out.print("Digite a duracao da atividade: ");
+            activityDuration = this.input.nextInt();
+            System.out.print("Digite a satisfacao que voce teve na atividade: ");
+            activitySatisfaction = this.input.nextInt();
+            System.out.print("Digite a descricao da atividade: ");
+            this.input.nextLine();
+            activityDescription = this.input.nextLine();
 
-    // DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    // LocalDate activityDate = LocalDate.parse(dateText, date);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate assistentDate = LocalDate.parse(dateText, formatter);
+            Calendar activityDate = Calendar.getInstance();
+            activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfYear());
 
-    // if (this.database.get(activityId) instanceof PhysicalActivity) {
-    // System.out.print("Informe a intensidade da atividade: ");
-    // activityIntensivity = this.input.nextInt();
+            Activity searchedActivity = activityController.findActivityById(activityId);
 
-    // Activity currentActivity = new PhysicalActivity(activityDate,
-    // activityDuration, activitySatisfaction,
-    // activityDescription, activityIntensivity);
-    // this.database.set(activityId, currentActivity);
+            if (searchedActivity instanceof PhysicalActivity) {
+                System.out.print("Informe a intensidade da atividade: ");
+                activityIntensivity = this.input.nextInt();
 
-    // } else
+                physicalActivityController.update(activityId, activityDate, activityDuration, activitySatisfaction, activityDescription, activityIntensivity, this.user.getId());
+                
 
-    // if (this.database.get(activityId) instanceof WorkActivity) {
-    // System.out.print("Informe a dificuldade da atividade: ");
-    // activityDificultity = this.input.nextInt();
+            } else
 
-    // Activity currentActivity = new WorkActivity(activityDate, activityDuration,
-    // activitySatisfaction,
-    // activityDescription, activityDificultity);
+            if (searchedActivity instanceof WorkActivity) {
+                System.out.print("Informe a dificuldade da atividade: ");
+                activityDificultity = this.input.nextInt();
 
-    // this.database.set(activityId, currentActivity);
 
-    // } else {
-    // Activity currentActivity = new LeisureActivity(activityDate,
-    // activityDuration, activitySatisfaction,
-    // activityDescription);
+            } else {
 
-    // this.database.set(activityId, currentActivity);
-    // }
+                
+            }
 
-    // System.out.println("ATIVIDADE EDITADA COM SUCESSO!");
-    // } catch (Exception error) {
-    // System.out.println("Erro: " + error + ". Voltando ao menu...");
-    // this.input.nextLine();
-    // return;
-    // }
-    // }
+            System.out.println("ATIVIDADE EDITADA COM SUCESSO!");
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            this.input.nextLine();
+            return;
+        }
+    }
 
     // private void removeActivity() {
     // try {

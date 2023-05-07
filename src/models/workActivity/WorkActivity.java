@@ -7,14 +7,19 @@ public class WorkActivity extends Activity {
     private int dificultity;
 
 
-    public WorkActivity(int id, Calendar date, int duration, int satisfaction, String description, int owner, int dificultity) throws Exception {
+    public WorkActivity(int id, Calendar date, int duration, int satisfaction, String description, int dificultity, int owner) throws Exception {
         super(id, date, duration, satisfaction, description, owner);
         this.setDificultity(dificultity);
     }
     
     public WorkActivity() {}
 
-    public WorkActivity(Calendar date, int duration, int satisfaction, String description, int owner, int dificultity) throws Exception {
+    public WorkActivity(int id, Calendar date, int duration, int satisfaction, String description, int dificultity) throws Exception {
+        super(id, date, duration, satisfaction, description);
+        this.setDificultity(dificultity);
+    }
+
+    public WorkActivity(Calendar date, int duration, int satisfaction, String description, int dificultity, int owner) throws Exception {
         super(date, duration, satisfaction, description, owner);
         this.setDificultity(dificultity);
     }

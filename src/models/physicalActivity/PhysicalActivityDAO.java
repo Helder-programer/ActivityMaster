@@ -36,10 +36,15 @@ public class PhysicalActivityDAO extends ActivityDAO {
     @Override
     public void update(Activity activity) throws Exception {
         super.update(activity);
+        
         String sql = "UPDATE TAB_ATIVIDADES_FISICAS SET VAL_INTENSIDADE = ? WHERE COD_ATIVIDADE = ?";
 
-        PreparedStatement statement = this.connection.prepareStatement(sql);
+        PhysicalActivity physicalActivity = new PhysicalActivity();
+        physicalActivity = (PhysicalActivity) activity;
 
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setInt(1, physicalActivity.getIntensivity());
+        statement.setInt(2, physicalActivity.getId());
         statement.execute();
         statement.close();
     }

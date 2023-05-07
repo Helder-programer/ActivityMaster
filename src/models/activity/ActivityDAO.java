@@ -3,7 +3,6 @@ package models.activity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
 import config.ConnectionFactory;
@@ -63,6 +62,12 @@ public abstract class ActivityDAO {
                 WHERE COD_ATIVIDADE = ?
                 """;
         PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setDate(1, new java.sql.Date(activity.getDateWithoutFormat().getTimeInMillis()));
+        statement.setInt(2, activity.getDuration());
+        statement.setInt(3, activity.getSatisfaction());
+        statement.setString(4, activity.getDescription());
+        statement.setInt(5, activity.getId());
+
         statement.execute();
         statement.close();
     }
@@ -73,16 +78,6 @@ public abstract class ActivityDAO {
         statement.setInt(1, activity.getId());
         statement.execute();
         statement.close();
-    }
-
-    public List<Activity> findById() {
-        List<Activity> activities = new ArrayList<Activity>();
-        return activities;
-    }
-
-    public List<Activity> findByDate() {
-        List<Activity> activities = new ArrayList<Activity>();
-        return activities;
     }
 
     public void closeConnection() throws Exception {

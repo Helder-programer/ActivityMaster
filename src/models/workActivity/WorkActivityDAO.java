@@ -36,8 +36,12 @@ public class WorkActivityDAO extends ActivityDAO {
     public void update(Activity activity) throws Exception {
         super.update(activity);
         String sql = "UPDATE TAB_ATIVIDADES_TRABALHO SET VAL_DIFICULDADE = ? WHERE COD_ATIVIDADE = ?";
+        WorkActivity workActivity = new WorkActivity();
+        workActivity = (WorkActivity) activity;
 
         PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setInt(1, workActivity.getDificultity());
+        statement.setInt(2, workActivity.getId());
         statement.execute();
         statement.close();
     }

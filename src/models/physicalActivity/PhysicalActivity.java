@@ -7,14 +7,19 @@ public class PhysicalActivity extends Activity {
     private int intensivity;
     
 
-    public PhysicalActivity(int id, Calendar date, int duration, int satisfaction, String description, int owner, int intensivity) throws Exception {
+    public PhysicalActivity(int id, Calendar date, int duration, int satisfaction, String description, int intensivity, int owner) throws Exception {
         super(id, date, duration, satisfaction, description, owner);
         this.setIntensivity(intensivity);
     }
     
     public PhysicalActivity() {}
 
-    public PhysicalActivity(Calendar date, int duration, int satisfaction, String description, int owner, int intensivity) throws Exception {
+    public PhysicalActivity(int id, Calendar date, int duration, int satisfaction, String description, int intensivity) throws Exception {
+        super(id, date, duration, satisfaction, description);
+        this.setIntensivity(intensivity);
+    }
+
+    public PhysicalActivity(Calendar date, int duration, int satisfaction, String description, int intensivity, int owner) throws Exception {
         super(date, duration, satisfaction, description, owner);
         this.setIntensivity(intensivity);
     }

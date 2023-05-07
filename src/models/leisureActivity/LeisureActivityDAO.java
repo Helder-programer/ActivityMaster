@@ -54,10 +54,8 @@ public class LeisureActivityDAO extends ActivityDAO {
                     TAB_ATIVIDADES_LAZER as L
                 WHERE
                     A.COD_ATIVIDADE = L.COD_ATIVIDADE
-                ORDER BY
-                    A.DTA_REALIZACAO, A.COD_ATIVIDADE DESC
                 """;
-
+                
         PreparedStatement statement = this.connection.prepareStatement(sql);
         ResultSet resultSet = statement.executeQuery();
 
