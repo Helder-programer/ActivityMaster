@@ -63,6 +63,7 @@ public class WorkActivityDAO extends ActivityDAO {
                     A.VAL_DURACAO,
                     A.VAL_SATISFACAO,
                     A.DES_ATIVIDADE,
+                    A.COD_USUARIO,
                     T.VAL_DIFICULDADE
                 FROM
                     TAB_ATIVIDADES as A,
@@ -70,7 +71,7 @@ public class WorkActivityDAO extends ActivityDAO {
                 WHERE
                     A.COD_ATIVIDADE = T.COD_ATIVIDADE
                 ORDER BY
-                    A.DTA_REALIZACAO, A.COD_ATIVIDADE DESC
+                    A.DTA_REALIZACAO DESC
                 """;
 
         PreparedStatement statement = this.connection.prepareStatement(sql);
@@ -94,5 +95,50 @@ public class WorkActivityDAO extends ActivityDAO {
         resultSet.close();
         statement.close();
         return workActivities;
+    }
+
+    @Override
+    public Activity findById(int id) throws Exception {
+        WorkActivity searchedWorkActivity;
+        String sql = """
+                SELECT
+                    A.COD_ATIVIDADE,
+                    A.DTA_REALIZACAO,
+                    A.VAL_DURACAO,
+                    A.VAL_SATISFACAO,
+                    A.DES_ATIVIDADE,
+                    A.COD_USUARIO,
+                    T.VAL_DIFICULDADE
+                FROM
+                    TAB_ATIVIDADES AS A,
+                    TAB_ATIVIDADES_TRABALHO AS T
+                WHERE
+                    A.COD_ATIVIDADE = T.COD_ATIVIDADE
+                    AND A.COD_ATIVIDADE = ?
+                """;
+
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            searchedWorkActivity = new WorkActivity();
+            Calendar calendar = Calendar.getInstance();
+            searchedWorkActivity.setId(resultSet.getInt(1));
+            calendar.setTime(resultSet.getDate(2));
+            searchedWorkActivity.setDate(calendar);
+            searchedWorkActivity.setDuration(resultSet.getInt(3));
+            searchedWorkActivity.setSatisfaction(resultSet.getInt(4));
+            searchedWorkActivity.setDescription(resultSet.getString(5));
+            searchedWorkActivity.setOwner(resultSet.getInt(6));
+            searchedWorkActivity.setDificultity(resultSet.getInt(7));
+            return searchedWorkActivity;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Activity> findByDate(Calendar date01, Calendar date02) throws Exception {
+        return null;
     }
 }

@@ -1,11 +1,13 @@
 package models.workActivity;
 import java.util.Calendar;
+import java.util.List;
 
 import models.activity.Activity;
 
 public class WorkActivity extends Activity {
     private int dificultity;
 
+    private static WorkActivityDAO workActivityDAO = new WorkActivityDAO();
 
     public WorkActivity(int id, Calendar date, int duration, int satisfaction, String description, int dificultity, int owner) throws Exception {
         super(id, date, duration, satisfaction, description, owner);
@@ -57,5 +59,30 @@ public class WorkActivity extends Activity {
         data += "BEM-ESTAR: " + this.calculateWellBeing() + "\n";
         return super.toString() + data;
     }
+
+    @Override
+    public void save() throws Exception {
+        workActivityDAO.create(this);       
+        
+    }
+
+    @Override
+    public void update() throws Exception {
+        workActivityDAO.update(this);
+        
+    }
+
+    @Override
+    public void delete() throws Exception {
+        workActivityDAO.delete(this);
+    }
    
+    public static List<Activity> findAll() throws Exception {
+        List<Activity> activities = workActivityDAO.findAll();
+        return activities;
+    }
+
+    public static Activity findById(int id) throws Exception {
+        
+    }
 }

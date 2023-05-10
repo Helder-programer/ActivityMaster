@@ -3,6 +3,7 @@ package models.activity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Calendar;
 import java.util.List;
 
 import config.ConnectionFactory;
@@ -85,4 +86,6 @@ public abstract class ActivityDAO {
     }
 
     public abstract List<Activity> findAll() throws Exception;
+    public abstract Activity findById(int id) throws Exception;
+    public abstract List<Activity> findByDate(Calendar date01, Calendar date02) throws Exception;
 }

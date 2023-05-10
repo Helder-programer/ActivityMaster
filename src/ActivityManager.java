@@ -1,4 +1,5 @@
 import models.activity.Activity;
+import models.leisureActivity.LeisureActivity;
 import models.physicalActivity.PhysicalActivity;
 import models.user.User;
 import models.workActivity.WorkActivity;
@@ -7,10 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import controllers.ActivityController;
-import controllers.LeisureActivityController;
-import controllers.PhysicalActivityController;
+import controllers.FilterController;
 import controllers.UserController;
-import controllers.WorkActivityController;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,12 +20,9 @@ import java.time.format.DateTimeFormatter;
 public class ActivityManager {
     private User user;
     private Scanner input = new Scanner(System.in);
-    private LeisureActivityController leisureActivityController = new LeisureActivityController();
-    private PhysicalActivityController physicalActivityController = new PhysicalActivityController();
-    private WorkActivityController workActivityController  = new WorkActivityController();
     private UserController userController = new UserController();
+    private FilterController filterController = new FilterController();
     private ActivityController activityController = new ActivityController();
-    
 
     private void menu() {
         int chosenOption = 0;
@@ -56,13 +52,13 @@ public class ActivityManager {
                     this.addNewActivity();
                     break;
                 case 2:
-                    // this.showAllActivities();
+                    this.showAllActivities();
                     break;
                 case 3:
                     this.updateActivity();
                     break;
                 case 4:
-                    // this.removeActivity();
+                    this.removeActivity();
                     break;
                 case 5:
                     // this.filterActivities();
@@ -150,21 +146,30 @@ public class ActivityManager {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate assistentDate = LocalDate.parse(dateText, formatter);
             Calendar activityDate = Calendar.getInstance();
-            activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfYear());
+            activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfMonth());
 
             switch (activityCategory) {
                 case 1:
                     System.out.print("Informe a intensidade da atividade: ");
                     int activityIntensivity = this.input.nextInt();
-                    physicalActivityController.create(activityDate, activityDuration, activitySatisfaction, activityDescription, activityIntensivity, this.user.getId());
+                    Activity physicalActivity = new PhysicalActivity(activityDate, activityDuration,
+                            activitySatisfaction, activityDescription, activityIntensivity, this.user.getId());
+                    activityController.create(physicalActivity);
+
                     break;
                 case 2:
-                    leisureActivityController.create(activityDate, activityDuration, activitySatisfaction, activityDescription, this.user.getId());
+                    Activity leisureActivity = new LeisureActivity(activityDate, activityDuration, activitySatisfaction,
+                            activityDescription, this.user.getId());
+                    activityController.create(leisureActivity);
+
                     break;
                 case 3:
                     System.out.print("Informe a dificuldade da atividade: ");
                     int activityDificultity = this.input.nextInt();
-                    workActivityController.create(activityDate, activityDuration, activitySatisfaction, activityDescription, activityDificultity, this.user.getId());
+                    Activity workActivity = new WorkActivity(activityDate, activityDuration, activitySatisfaction,
+                            activityDescription, activityDificultity, this.user.getId());
+                    activityController.create(workActivity);
+
                     break;
             }
             System.out.print("ATIVIDADE CADASTRADA COM SUCESSO!");
@@ -176,14 +181,17 @@ public class ActivityManager {
         }
     }
 
-    // private void showAllActivities() {
-    // int currentId = 1;
-    // System.out.println("***ATIVIDADES PRESENTES NO BANCO DE DADOS:***\n");
-    // for (Activity activity : this.database) {
-    // System.out.println("ID: " + currentId + ";\n" + activity.toString());
-    // currentId++;
-    // }
-    // }
+    private void showAllActivities() {
+        try {
+            List<Activity> activities = filterController.findAll();
+            for (Activity activity: activities) {
+                System.out.println(activity.toString());
+            }
+        }catch (Exception error) {
+            System.out.println(error);
+        }
+
+    }
 
     private void updateActivity() {
         int activityId = 0;
@@ -211,16 +219,18 @@ public class ActivityManager {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate assistentDate = LocalDate.parse(dateText, formatter);
             Calendar activityDate = Calendar.getInstance();
-            activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfYear());
+            activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfMonth());
 
-            Activity searchedActivity = activityController.findActivityById(activityId);
+            Activity searchedActivity = filterController.findActivityById(activityId);
 
             if (searchedActivity instanceof PhysicalActivity) {
                 System.out.print("Informe a intensidade da atividade: ");
                 activityIntensivity = this.input.nextInt();
+                PhysicalActivity physicalActivity = new PhysicalActivity(activityId, activityDate, activityDuration,
+                        activitySatisfaction, activityDescription, activityIntensivity);
+                searchedActivity = physicalActivity;
 
-                physicalActivityController.update(activityId, activityDate, activityDuration, activitySatisfaction, activityDescription, activityIntensivity, this.user.getId());
-                
+                activityController.update(searchedActivity);
 
             } else
 
@@ -228,10 +238,13 @@ public class ActivityManager {
                 System.out.print("Informe a dificuldade da atividade: ");
                 activityDificultity = this.input.nextInt();
 
+                WorkActivity workActivity = new WorkActivity(activityId, activityDate, activityDuration,
+                        activitySatisfaction, activityDescription, activityDificultity);
+                searchedActivity = workActivity;
 
+                activityController.update(searchedActivity);
             } else {
-
-                
+                searchedActivity.update();
             }
 
             System.out.println("ATIVIDADE EDITADA COM SUCESSO!");
@@ -242,21 +255,22 @@ public class ActivityManager {
         }
     }
 
-    // private void removeActivity() {
-    // try {
-    // System.out.println("Informe o id da atividade que deseja remover");
-    // int activityId = this.input.nextInt();
+    private void removeActivity() {
+        try {
+            System.out.println("Informe o id da atividade que deseja remover");
+            int activityId = this.input.nextInt();
 
-    // activityId -= 1;
+            Activity searchedActivity = filterController.findActivityById(activityId);
 
-    // this.database.remove(activityId);
-    // System.out.print("ATIVIDADE REMOVIDA COM SUCESSO!");
-    // } catch (Exception error) {
-    // System.out.println("Erro: " + error + ". Voltando ao menu...");
-    // this.input.nextLine();
-    // return;
-    // }
-    // }
+            activityController.delete(searchedActivity);
+
+            System.out.print("ATIVIDADE REMOVIDA COM SUCESSO!");
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            this.input.nextLine();
+            return;
+        }
+    }
 
     // private void filterActivities() {
     // String message = """

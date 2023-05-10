@@ -66,6 +66,7 @@ public class PhysicalActivityDAO extends ActivityDAO {
                     A.VAL_DURACAO,
                     A.VAL_SATISFACAO,
                     A.DES_ATIVIDADE,
+                    A.COD_USUARIO,
                     F.VAL_INTENSIDADE
                 FROM
                     TAB_ATIVIDADES as A,
@@ -73,7 +74,7 @@ public class PhysicalActivityDAO extends ActivityDAO {
                 WHERE
                     A.COD_ATIVIDADE = F.COD_ATIVIDADE
                 ORDER BY
-                    A.DTA_REALIZACAO, A.COD_ATIVIDADE DESC
+                    A.DTA_REALIZACAO DESC
                 """;
 
         PreparedStatement statement = this.connection.prepareStatement(sql);
@@ -97,5 +98,51 @@ public class PhysicalActivityDAO extends ActivityDAO {
         resultSet.close();
         statement.close();
         return physicalActivities;
+    }
+
+
+    @Override
+    public Activity findById(int id) throws Exception {
+        PhysicalActivity searchedPhysicalActivity;
+        String sql = """
+                SELECT
+                    A.COD_ATIVIDADE,
+                    A.DTA_REALIZACAO,
+                    A.VAL_DURACAO,
+                    A.VAL_SATISFACAO,
+                    A.DES_ATIVIDADE,
+                    A.COD_USUARIO,
+                    F.VAL_INTENSIDADE
+                FROM
+                    TAB_ATIVIDADES AS A,
+                    TAB_ATIVIDADES_FISICAS AS F
+                WHERE
+                    A.COD_ATIVIDADE = F.COD_ATIVIDADE
+                    AND A.COD_ATIVIDADE = ?
+                """;
+
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            searchedPhysicalActivity = new PhysicalActivity();
+            Calendar calendar = Calendar.getInstance();
+            searchedPhysicalActivity.setId(resultSet.getInt(1));
+            calendar.setTime(resultSet.getDate(2));
+            searchedPhysicalActivity.setDate(calendar);
+            searchedPhysicalActivity.setDuration(resultSet.getInt(3));
+            searchedPhysicalActivity.setSatisfaction(resultSet.getInt(4));
+            searchedPhysicalActivity.setDescription(resultSet.getString(5));
+            searchedPhysicalActivity.setOwner((resultSet.getInt(6)));
+            searchedPhysicalActivity.setIntensivity(resultSet.getInt(7));
+            return searchedPhysicalActivity;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Activity> findByDate(Calendar date01, Calendar date02) throws Exception {
+        return null;
     }
 }

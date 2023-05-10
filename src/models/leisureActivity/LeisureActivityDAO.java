@@ -48,14 +48,16 @@ public class LeisureActivityDAO extends ActivityDAO {
                     A.DTA_REALIZACAO,
                     A.VAL_DURACAO,
                     A.VAL_SATISFACAO,
-                    A.DES_ATIVIDADE
+                    A.DES_ATIVIDADE,
+                    A.COD_USUARIO
                 FROM
                     TAB_ATIVIDADES as A,
                     TAB_ATIVIDADES_LAZER as L
                 WHERE
                     A.COD_ATIVIDADE = L.COD_ATIVIDADE
+                    ORDER BY A.DTA_REALIZACAO
                 """;
-                
+
         PreparedStatement statement = this.connection.prepareStatement(sql);
         ResultSet resultSet = statement.executeQuery();
 
@@ -69,12 +71,56 @@ public class LeisureActivityDAO extends ActivityDAO {
             currentLeisureActivity.setDuration(resultSet.getInt(3));
             currentLeisureActivity.setSatisfaction(resultSet.getInt(4));
             currentLeisureActivity.setDescription(resultSet.getString(5));
+            currentLeisureActivity.setOwner(resultSet.getInt(6));
 
             leisureActivities.add(currentLeisureActivity);
         }
-        
+
         resultSet.close();
         statement.close();
         return leisureActivities;
+    }
+
+    @Override
+    public Activity findById(int id) throws Exception {
+        LeisureActivity searchedLeisureActivity;
+        String sql = """
+                SELECT
+                    A.COD_ATIVIDADE,
+                    A.DTA_REALIZACAO,
+                    A.VAL_DURACAO,
+                    A.VAL_SATISFACAO,
+                    A.DES_ATIVIDADE,
+                    A.COD_USUARIO
+                FROM
+                    TAB_ATIVIDADES AS A,
+                    TAB_ATIVIDADES_LAZER AS L
+                WHERE
+                    A.COD_ATIVIDADE = L.COD_ATIVIDADE
+                    AND A.COD_ATIVIDADE = ?
+                """;
+
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            searchedLeisureActivity = new LeisureActivity();
+            Calendar calendar = Calendar.getInstance();
+            searchedLeisureActivity.setId(resultSet.getInt(1));
+            calendar.setTime(resultSet.getDate(2));
+            searchedLeisureActivity.setDate(calendar);
+            searchedLeisureActivity.setDuration(resultSet.getInt(3));
+            searchedLeisureActivity.setSatisfaction(resultSet.getInt(4));
+            searchedLeisureActivity.setDescription(resultSet.getString(5));
+            searchedLeisureActivity.setOwner((resultSet.getInt(6)));
+            return searchedLeisureActivity;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Activity> findByDate(Calendar date01, Calendar date02) throws Exception {
+        return null;
     }
 }

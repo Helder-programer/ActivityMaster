@@ -1,6 +1,7 @@
 package models.activity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 public abstract class Activity implements Comparable<Activity> {
     protected int id;
@@ -126,4 +127,19 @@ public abstract class Activity implements Comparable<Activity> {
         return 0;
     }
 
+
+    public abstract void save() throws Exception;
+    public abstract void update() throws Exception;
+    public abstract void delete() throws Exception;   
+
+    protected static List<Activity> findAll() throws Exception {
+        throw new Exception("Metodo ainda nao implementado");
+    }
+    
+    protected static List<Activity> findById() throws Exception {
+        throw new Exception("Metodo ainda nao implementado");
+    }
+    protected static List<Activity> findByDate() throws Exception {
+        throw new Exception("Metodo ainda nao implementado");
+    }
 }
