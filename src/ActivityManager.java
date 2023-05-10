@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import controllers.ActivityController;
-import controllers.FilterController;
 import controllers.UserController;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ public class ActivityManager {
     private User user;
     private Scanner input = new Scanner(System.in);
     private UserController userController = new UserController();
-    private FilterController filterController = new FilterController();
     private ActivityController activityController = new ActivityController();
 
     private void menu() {
@@ -183,7 +181,7 @@ public class ActivityManager {
 
     private void showAllActivities() {
         try {
-            List<Activity> activities = filterController.findAll();
+            List<Activity> activities = activityController.findAll();
             for (Activity activity: activities) {
                 System.out.println(activity.toString());
             }
@@ -221,7 +219,7 @@ public class ActivityManager {
             Calendar activityDate = Calendar.getInstance();
             activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfMonth());
 
-            Activity searchedActivity = filterController.findActivityById(activityId);
+            Activity searchedActivity = activityController.findActivityById(activityId);
 
             if (searchedActivity instanceof PhysicalActivity) {
                 System.out.print("Informe a intensidade da atividade: ");
@@ -260,7 +258,7 @@ public class ActivityManager {
             System.out.println("Informe o id da atividade que deseja remover");
             int activityId = this.input.nextInt();
 
-            Activity searchedActivity = filterController.findActivityById(activityId);
+            Activity searchedActivity = activityController.findActivityById(activityId);
 
             activityController.delete(searchedActivity);
 

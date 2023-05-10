@@ -83,6 +83,7 @@ public class WorkActivity extends Activity {
     }
 
     public static Activity findById(int id) throws Exception {
-        
+        Activity activity = workActivityDAO.findById(id);
+        return activity;
     }
 }
