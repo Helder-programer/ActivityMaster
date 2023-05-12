@@ -15,9 +15,6 @@ public abstract class Activity implements Comparable<Activity> {
 
     public abstract double calculateWellBeing();
 
-
-    
-
     public Activity(int id, Calendar date, int duration, int satisfaction, String description, int owner) throws Exception {
         this.setId(id);
         this.setDate(date);

@@ -8,6 +8,7 @@ import models.leisureActivity.LeisureActivity;
 import models.physicalActivity.PhysicalActivity;
 import models.workActivity.WorkActivity;
 
+
 public class ActivityController {
     public void create(Activity activity) throws Exception {
         activity.save();
@@ -20,7 +21,6 @@ public class ActivityController {
     public void delete(Activity activity) throws Exception {
         activity.delete();
     }
-
 
     public Activity findActivityById(int id) throws Exception {
         Activity searchedActivity;

@@ -182,10 +182,10 @@ public class ActivityManager {
     private void showAllActivities() {
         try {
             List<Activity> activities = activityController.findAll();
-            for (Activity activity: activities) {
+            for (Activity activity : activities) {
                 System.out.println(activity.toString());
             }
-        }catch (Exception error) {
+        } catch (Exception error) {
             System.out.println(error);
         }
 
@@ -270,88 +270,72 @@ public class ActivityManager {
         }
     }
 
-    // private void filterActivities() {
-    // String message = """
+    private void filterActivities() {
+        String message = """
 
-    // ***INFORME O FILTRO QUE DESEJAR FAZER***
-    // 1-Data
-    // 2-Categoria
-    // """;
+                ***INFORME O FILTRO QUE DESEJAR FAZER***
+                1-Data
+                2-Categoria
+                """;
 
-    // try {
-    // System.out.println(message);
-    // int chosenFilter = this.input.nextInt();
+        try {
+            System.out.println(message);
+            int chosenFilter = this.input.nextInt();
 
-    // switch (chosenFilter) {
-    // case 1:
-    // this.filterActivitiesPerDate();
-    // break;
-    // case 2:
-    // this.filterWithCategories();
-    // break;
-    // default:
-    // System.out.println("Escolha uma opcao valida. voltando ao menu...");
-    // }
-    // } catch (Exception error) {
-    // System.out.println("Erro: " + error + ". Voltando ao menu...");
-    // this.input.nextLine();
-    // return;
-    // }
+            switch (chosenFilter) {
+                case 1:
+                    this.filterActivitiesPerDate();
+                    break;
+                case 2:
+                    this.filterWithCategories();
+                    break;
+                default:
+                    System.out.println("Escolha uma opcao valida. voltando ao menu...");
+            }
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            this.input.nextLine();
+            return;
+        }
 
-    // }
+    }
 
-    // private void filterActivitiesPerDate() {
-    // double totalEnergyExpense = 0;
-    // double totalWellBeing = 0;
+    private void filterActivitiesPerDate() {
+        double totalEnergyExpense = 0;
+        double totalWellBeing = 0;
 
-    // try {
-    // System.out.println("Informe da data inicial");
-    // System.out.print("Dia: ");
-    // int initialDay = this.input.nextInt();
-    // System.out.print("Mês: ");
-    // int initialMonth = this.input.nextInt();
-    // System.out.print("Ano: ");
-    // int initialYear = this.input.nextInt();
+        try {
+            System.out.println("Informe da data inicial");
+            System.out.print("Dia: ");
+            int initialDay = this.input.nextInt();
+            System.out.print("Mês: ");
+            int initialMonth = this.input.nextInt();
+            System.out.print("Ano: ");
+            int initialYear = this.input.nextInt();
 
-    // System.out.println("Informe da data final");
-    // System.out.print("Dia: ");
-    // int finalDay = this.input.nextInt();
-    // System.out.print("Mês: ");
-    // int finalMonth = this.input.nextInt();
-    // System.out.print("Ano: ");
-    // int finalYear = this.input.nextInt();
+            System.out.println("Informe da data final");
+            System.out.print("Dia: ");
+            int finalDay = this.input.nextInt();
+            System.out.print("Mês: ");
+            int finalMonth = this.input.nextInt();
+            System.out.print("Ano: ");
+            int finalYear = this.input.nextInt();
 
-    // // Construtor utilizado para validar as datas inseridas
-    // LocalDate validDate = LocalDate.of(initialYear, initialMonth, initialDay);
-    // validDate = LocalDate.of(finalYear, finalMonth, finalDay);
+            // Construtor utilizado para validar as datas inseridas
+            LocalDate validDate = LocalDate.of(initialYear, initialMonth, initialDay);
+            validDate = LocalDate.of(finalYear, finalMonth, finalDay);
 
-    // System.out.println("\nATIVIDADES FILTRADAS\n");
-    // for (Activity activity : this.database) {
-    // int activityDay = activity.getDateWithoutFormat().getDayOfMonth();
-    // int activityMonth = activity.getDateWithoutFormat().getMonthValue();
-    // int activityYear = activity.getDateWithoutFormat().getYear();
+            
 
-    // boolean isMatchedActvity = (activityDay >= initialDay && activityDay <=
-    // finalDay)
-    // && (activityMonth >= initialMonth && activityMonth <= finalMonth)
-    // && (activityYear >= initialYear && activityYear <= finalYear);
+            System.out.println("\n\nGASTO DE ENERGIA TOTAL: " + totalEnergyExpense);
+            System.out.println("BEM-ESTAR TOTAL: " + totalWellBeing);
 
-    // if (isMatchedActvity) {
-    // System.out.println(activity.toString());
-    // totalEnergyExpense += activity.calculateEnergyExpense();
-    // totalWellBeing += activity.calculateWellBeing();
-    // }
-    // }
-
-    // System.out.println("\n\nGASTO DE ENERGIA TOTAL: " + totalEnergyExpense);
-    // System.out.println("BEM-ESTAR TOTAL: " + totalWellBeing);
-
-    // } catch (Exception error) {
-    // System.out.println("Erro: " + error + ". Voltando ao menu...");
-    // this.input.nextLine();
-    // return;
-    // }
-    // }
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            this.input.nextLine();
+            return;
+        }
+    }
 
     // private void filterWithCategories() {
     // List<Activity> activitiesFilter = new ArrayList<Activity>();

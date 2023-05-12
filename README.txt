@@ -1,4 +1,4 @@
-***Projeto desenvolvido por Helder Nicollas, Cayo de Almeida, Gabriel Dias e Maria Julya***
+***Projeto desenvolvido por Helder Nicollas e Gabriel Dias***
 
 Diário e Avaliação de Atividades
 

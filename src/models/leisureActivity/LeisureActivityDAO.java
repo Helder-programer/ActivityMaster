@@ -121,6 +121,7 @@ public class LeisureActivityDAO extends ActivityDAO {
 
     @Override
     public List<Activity> findByDate(Calendar date01, Calendar date02) throws Exception {
-        return null;
+        String sql = "SELECT ";
+        PreparedStatement statement = this.connection.prepareStatement(sql);
     }
 }

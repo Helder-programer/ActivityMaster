@@ -13,7 +13,7 @@ import models.activity.ActivityDAO;
 
 public class WorkActivityDAO extends ActivityDAO {
     private Connection connection;
-
+    
     public WorkActivityDAO() {
         this.connection = ConnectionFactory.getConnection();
     }
