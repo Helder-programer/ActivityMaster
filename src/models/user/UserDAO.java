@@ -42,11 +42,20 @@ public class UserDAO {
             }
         }
 
-        System.out.println("Login e/ou senha incorretos!");
-
         resultSet.close();
         statement.close();
         return false;
     }
 
+    public void create(User user) throws Exception {
+        String sql = "INSERT INTO TAB_USUARIOS VALUES (DEFAULT, ?, ?)";
+
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+
+        statement.setString(1, user.getUsername());
+        statement.setString(2, user.getPassword());
+        
+        statement.execute();
+        statement.close();
+    }
 }

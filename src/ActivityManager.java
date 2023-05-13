@@ -10,9 +10,7 @@ import java.util.Scanner;
 import controllers.ActivityController;
 import controllers.UserController;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -62,7 +60,7 @@ public class ActivityManager {
                     this.filterActivities();
                     break;
                 case 6:
-                    // this.activitiesRanking();
+                    this.activitiesRanking();
                     break;
                 case 7:
                     System.out.println("Saindo...");
@@ -75,33 +73,66 @@ public class ActivityManager {
     }
 
     public void init() {
-        this.login();
+        try {
+            String message = """
+                    1-Login;
+                    2-Criar Conta;
+                    3-Sair;
+                    """;
+
+            System.out.println(message);
+            int chosenOption = this.input.nextInt();
+
+            switch (chosenOption) {
+                case 1:
+                    this.login();
+                    break;
+                case 2:
+                    this.register();
+                    break;
+                case 3:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Informe uma opcao valida");
+            }
+
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            this.input.nextLine();
+            return;
+        }
     }
 
-    public void login() {
-        try {
-            while (true) {
-                System.out.print("Digite o usuario: ");
-                String username = this.input.next();
-                System.out.print("Digite a senha: ");
-                String password = this.input.next();
+    public void login() throws Exception {
+        System.out.println("---Login---");
+        System.out.print("Digite o usuario: ");
+        String username = this.input.next();
+        System.out.print("Digite a senha: ");
+        String password = this.input.next();
 
-                User userToLogin = userController.login(username, password);
+        User userToLogin = userController.login(username, password);
 
-                if (userToLogin != null) {
-                    System.out.println("Autenticado!");
-                    this.user = userToLogin;
-                    this.menu();
-                    break;
-                }
-
-                System.out.println("Usuario e/ou senha incorretos!");
-
-            }
-        } catch (Exception error) {
-            System.out.println(error);
+        if (userToLogin != null) {
+            System.out.println("Autenticado!");
+            this.user = userToLogin;
+            this.menu();
         }
 
+        System.out.println("Usuario e/ou senha incorretos!");
+    }
+
+    public void register() throws Exception {
+        System.out.println("---Crie sua conta---");
+        System.out.print("Digite o usuario: ");
+        String username = this.input.next();
+        System.out.print("Digite a senha: ");
+        String password = this.input.next();
+
+        User user = new User(username, password);
+
+        user.save();
+        this.login();
     }
 
     private void addNewActivity() {
@@ -120,7 +151,6 @@ public class ActivityManager {
                     2-Atividade de Lazer
                     3-Atividade de Trabalho
                     """;
-
 
             System.out.println(message);
             activityCategory = this.input.nextInt();
@@ -183,7 +213,7 @@ public class ActivityManager {
 
     private void showAllActivities() {
         try {
-            List<Activity> activities = activityController.findAll();
+            List<Activity> activities = activityController.findAll(this.user.getId());
             for (Activity activity : activities) {
                 System.out.println(activity.toString());
             }
@@ -221,16 +251,18 @@ public class ActivityManager {
             Calendar activityDate = Calendar.getInstance();
             activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfMonth());
 
-            Activity searchedActivity = activityController.findById(activityId);
+            Activity searchedActivity = activityController.findById(activityId, this.user.getId());
 
             if (searchedActivity instanceof PhysicalActivity) {
                 System.out.print("Informe a intensidade da atividade: ");
                 activityIntensivity = this.input.nextInt();
+
                 PhysicalActivity physicalActivity = new PhysicalActivity(activityId, activityDate, activityDuration,
                         activitySatisfaction, activityDescription, activityIntensivity);
+
                 searchedActivity = physicalActivity;
 
-                activityController.update(searchedActivity);
+                activityController.update(searchedActivity, this.user.getId());
 
             } else
 
@@ -242,9 +274,10 @@ public class ActivityManager {
                         activitySatisfaction, activityDescription, activityDificultity);
                 searchedActivity = workActivity;
 
-                activityController.update(searchedActivity);
+                activityController.update(searchedActivity, this.user.getId());
             } else {
-                searchedActivity.update();
+                activityController.update(searchedActivity, this.user.getId());
+                ;
             }
 
             System.out.println("ATIVIDADE EDITADA COM SUCESSO!");
@@ -260,9 +293,9 @@ public class ActivityManager {
             System.out.println("Informe o id da atividade que deseja remover");
             int activityId = this.input.nextInt();
 
-            Activity searchedActivity = activityController.findById(activityId);
+            Activity searchedActivity = activityController.findById(activityId, this.user.getId());
 
-            activityController.delete(searchedActivity);
+            activityController.delete(searchedActivity, this.user.getId());
 
             System.out.print("ATIVIDADE REMOVIDA COM SUCESSO!");
         } catch (Exception error) {
@@ -289,7 +322,7 @@ public class ActivityManager {
                     this.filterActivitiesPerDate();
                     break;
                 case 2:
-                    // this.filterWithCategories();
+                    this.filterWithCategories();
                     break;
                 default:
                     System.out.println("Escolha uma opcao valida. voltando ao menu...");
@@ -306,31 +339,27 @@ public class ActivityManager {
         double totalEnergyExpense = 0;
         double totalWellBeing = 0;
 
-        
         try {
             System.out.print("Informe da data inicial: ");
-            String initialDateText = this.input.next(); 
+            String initialDateText = this.input.next();
             System.out.print("Informe da data final: ");
             String finalDateText = this.input.next();
-
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate assistentInitialDate = LocalDate.parse(initialDateText, formatter);
             LocalDate assistentFinalDate = LocalDate.parse(finalDateText, formatter);
 
-
             Calendar initialDate = Calendar.getInstance();
             Calendar finalDate = Calendar.getInstance();
-            
 
-            initialDate.set(assistentInitialDate.getYear(), assistentInitialDate.getMonthValue() -1, assistentInitialDate.getDayOfMonth());
-            finalDate.set(assistentFinalDate.getYear(), assistentFinalDate.getMonthValue() - 1, assistentFinalDate.getDayOfMonth());
+            initialDate.set(assistentInitialDate.getYear(), assistentInitialDate.getMonthValue() - 1,
+                    assistentInitialDate.getDayOfMonth());
+            finalDate.set(assistentFinalDate.getYear(), assistentFinalDate.getMonthValue() - 1,
+                    assistentFinalDate.getDayOfMonth());
 
+            List<Activity> activities = activityController.findByDate(initialDate, finalDate, this.user.getId());
 
-
-            List<Activity> activities =  activityController.findByDate(initialDate, finalDate);
-
-            for (Activity activity: activities) {
+            for (Activity activity : activities) {
                 System.out.println(activity.toString());
                 totalEnergyExpense += activity.calculateEnergyExpense();
                 totalWellBeing += activity.calculateWellBeing();
@@ -346,74 +375,48 @@ public class ActivityManager {
         }
     }
 
-    // private void filterWithCategories() {
-    // List<Activity> activitiesFilter = new ArrayList<Activity>();
-    // try {
-    // String message = """
+    private void filterWithCategories() {
+        try {
+            String message = """
 
-    // ***FILTRO POR CATEGORIA***
-    // 1-Atividade Física
-    // 2-Atividade de Lazer
-    // 3-Atividade de Trabalho
-    // """;
-    // System.out.println(message);
-    // int activityCategory = this.input.nextInt();
+                    ***FILTRO POR CATEGORIA***
+                    1-Atividade Física
+                    2-Atividade de Lazer
+                    3-Atividade de Trabalho
+                    """;
+            System.out.println(message);
+            int activityCategory = this.input.nextInt();
 
-    // switch (activityCategory) {
-    // case 1:
-    // for (Activity activity : this.database) {
-    // if (activity instanceof PhysicalActivity)
-    // activitiesFilter.add(activity);
-    // }
-    // break;
-    // case 2:
-    // for (Activity activity : this.database) {
-    // if (activity instanceof LeisureActivity)
-    // activitiesFilter.add(activity);
-    // }
-    // break;
-    // case 3:
-    // for (Activity activity : this.database) {
-    // if (activity instanceof WorkActivity)
-    // activitiesFilter.add(activity);
-    // }
-    // break;
-    // default:
-    // System.out.println("Informe uma opcao valida");
-    // }
+            List<Activity> searchedActivities = activityController.findByCategory(activityCategory, this.user.getId());
 
-    // System.out.println("ATIVIDADES FILTRADAS:\n");
-    // for (Activity activity : activitiesFilter) {
-    // System.out.println(activity.toString());
-    // }
+            System.out.println("ATIVIDADES FILTRADAS:\n");
+            for (Activity activity : searchedActivities) {
+                System.out.println(activity.toString());
+            }
 
-    // } catch (Exception error) {
-    // System.out.println("Erro: " + error + ". Voltando ao menu...");
-    // this.input.nextLine();
-    // return;
-    // }
-    // }
+        } catch (Exception error) {
+            System.out.println("Erro: " + error + ". Voltando ao menu...");
+            this.input.nextLine();
+            return;
+        }
+    }
 
-    // private void activitiesRanking() {
-    // try {
-    // System.out.println("***ATIVIDADES COM MAIS GASTO DE ENERGIA***");
-    // List<Activity> activityList = new ArrayList<Activity>();
-    // activityList = this.database;
+    private void activitiesRanking() {
+        try {
+            System.out.println("***ATIVIDADES COM MAIS GASTO DE ENERGIA***");
+            System.out.println("TOP 3 ATIVIDADES COM MAIS GASTO DE ENERGIA");
 
-    // Collections.sort(activityList);
-    // Collections.reverse(activityList);
+            List<Activity> activities = activityController.ranking(this.user.getId());
 
-    // System.out.println("TOP 3 ATIVIDADES COM MAIS GASTO DE");
+            for (int counter = 0; counter < 3; counter++) {
+                System.out.println("RANKING: " + (counter + 1));
+                System.out.println(activities.get(counter).toString());
 
-    // for (int counter = 0; counter < 3; counter++) {
-    // System.out.println("RANKING: " + (counter + 1));
-    // System.out.println(activityList.get(counter).toString());
-    // }
-    // } catch (Exception error) {
-    // System.out.println("Erro: Voce nao possui 3 atividades ou mais. Voltando ao
-    // menu...");
-    // return;
-    // }
-    // }
+            }
 
+        } catch (Exception error) {
+            System.out.println("Erro: Voce nao possui 3 atividades ou mais. Voltando ao menu...");
+            return;
+        }
+    }
 }

@@ -4,6 +4,7 @@ public class User {
     private int id;
     private String username;
     private String password;
+    private static UserDAO userDAO = new UserDAO();
 
     public User(int id, String username, String password) {
         this.id = id;
@@ -37,5 +38,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    public static boolean authenticate(User user) throws Exception {
+        return userDAO.authenticate(user);
+    }
+
+    public void save() throws Exception {
+        userDAO.create(this);
     }
 }
