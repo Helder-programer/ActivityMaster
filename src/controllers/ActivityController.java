@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import models.activity.Activity;
@@ -22,7 +23,7 @@ public class ActivityController {
         activity.delete();
     }
 
-    public Activity findActivityById(int id) throws Exception {
+    public Activity findById(int id) throws Exception {
         Activity searchedActivity;
 
         searchedActivity = LeisureActivity.findById(id);
@@ -32,6 +33,7 @@ public class ActivityController {
         if (searchedActivity != null) return searchedActivity;
 
         searchedActivity = WorkActivity.findById(id);
+        if (searchedActivity != null) return searchedActivity;
         
         throw new Exception("Nenhum registro encontrado");
     }
@@ -43,7 +45,18 @@ public class ActivityController {
         activities.addAll(LeisureActivity.findAll());
         activities.addAll(WorkActivity.findAll());
 
+        return activities;      
+    }
+
+
+    public List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
+        List<Activity> activities = new ArrayList<Activity>();
+
+        activities.addAll(LeisureActivity.findByDate(initialDate, finalDate));
+        activities.addAll(PhysicalActivity.findByDate(initialDate, finalDate));
+        activities.addAll(WorkActivity.findByDate(initialDate, finalDate));
+
         return activities;
-                
+
     }
 }

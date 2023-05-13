@@ -120,8 +120,49 @@ public class LeisureActivityDAO extends ActivityDAO {
     }
 
     @Override
-    public List<Activity> findByDate(Calendar date01, Calendar date02) throws Exception {
-        String sql = "SELECT ";
+    public List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
+        List<Activity> activities = new ArrayList<Activity>();
+
+        String sql = """
+                    SELECT
+                    A.COD_ATIVIDADE,
+                    A.DTA_REALIZACAO,
+                    A.VAL_DURACAO,
+                    A.VAL_SATISFACAO,
+                    A.DES_ATIVIDADE,
+                    A.COD_USUARIO
+                FROM
+                    TAB_ATIVIDADES AS A,
+                    TAB_ATIVIDADES_LAZER AS L
+                WHERE
+                    A.COD_ATIVIDADE = L.COD_ATIVIDADE
+                    AND A.DTA_REALIZACAO BETWEEN ? AND ?
+                        """;
+
         PreparedStatement statement = this.connection.prepareStatement(sql);
+
+        statement.setDate(1, new java.sql.Date(initialDate.getTimeInMillis()));
+        statement.setDate(2, new java.sql.Date(finalDate.getTimeInMillis()));
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while(resultSet.next()) {
+            LeisureActivity currentLeisureActivity = new LeisureActivity();
+
+            Calendar calendar = Calendar.getInstance();
+            currentLeisureActivity.setId(resultSet.getInt(1));
+            calendar.setTime(resultSet.getDate(2));
+            currentLeisureActivity.setDate(calendar);
+            currentLeisureActivity.setDuration(resultSet.getInt(3));
+            currentLeisureActivity.setSatisfaction(resultSet.getInt(4));
+            currentLeisureActivity.setDescription(resultSet.getString(5));
+            currentLeisureActivity.setOwner(resultSet.getInt(6));
+
+            
+            activities.add(currentLeisureActivity);
+
+        }
+
+        return activities;
     }
 }

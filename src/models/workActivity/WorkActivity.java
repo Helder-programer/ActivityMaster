@@ -86,4 +86,9 @@ public class WorkActivity extends Activity {
         Activity activity = workActivityDAO.findById(id);
         return activity;
     }
+
+    public static List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
+        List<Activity> activites = workActivityDAO.findByDate(initialDate, finalDate);
+        return activites;
+    }
 }

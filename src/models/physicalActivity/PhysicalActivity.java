@@ -87,4 +87,10 @@ public class PhysicalActivity extends Activity {
         Activity activity = physicalActivityDAO.findById(id);
         return activity;
     }
+
+
+    public static List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
+        List<Activity> activites = physicalActivityDAO.findByDate(initialDate, finalDate);
+        return activites;
+    }
 }

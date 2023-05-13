@@ -59,7 +59,7 @@ public class ActivityManager {
                     this.removeActivity();
                     break;
                 case 5:
-                    // this.filterActivities();
+                    this.filterActivities();
                     break;
                 case 6:
                     // this.activitiesRanking();
@@ -121,6 +121,7 @@ public class ActivityManager {
                     3-Atividade de Trabalho
                     """;
 
+
             System.out.println(message);
             activityCategory = this.input.nextInt();
             boolean isValidActivitycategory = activityCategory == 1 || activityCategory == 2 || activityCategory == 3;
@@ -152,6 +153,7 @@ public class ActivityManager {
                     int activityIntensivity = this.input.nextInt();
                     Activity physicalActivity = new PhysicalActivity(activityDate, activityDuration,
                             activitySatisfaction, activityDescription, activityIntensivity, this.user.getId());
+
                     activityController.create(physicalActivity);
 
                     break;
@@ -219,7 +221,7 @@ public class ActivityManager {
             Calendar activityDate = Calendar.getInstance();
             activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfMonth());
 
-            Activity searchedActivity = activityController.findActivityById(activityId);
+            Activity searchedActivity = activityController.findById(activityId);
 
             if (searchedActivity instanceof PhysicalActivity) {
                 System.out.print("Informe a intensidade da atividade: ");
@@ -258,7 +260,7 @@ public class ActivityManager {
             System.out.println("Informe o id da atividade que deseja remover");
             int activityId = this.input.nextInt();
 
-            Activity searchedActivity = activityController.findActivityById(activityId);
+            Activity searchedActivity = activityController.findById(activityId);
 
             activityController.delete(searchedActivity);
 
@@ -287,7 +289,7 @@ public class ActivityManager {
                     this.filterActivitiesPerDate();
                     break;
                 case 2:
-                    this.filterWithCategories();
+                    // this.filterWithCategories();
                     break;
                 default:
                     System.out.println("Escolha uma opcao valida. voltando ao menu...");
@@ -304,28 +306,35 @@ public class ActivityManager {
         double totalEnergyExpense = 0;
         double totalWellBeing = 0;
 
+        
         try {
-            System.out.println("Informe da data inicial");
-            System.out.print("Dia: ");
-            int initialDay = this.input.nextInt();
-            System.out.print("Mês: ");
-            int initialMonth = this.input.nextInt();
-            System.out.print("Ano: ");
-            int initialYear = this.input.nextInt();
+            System.out.print("Informe da data inicial: ");
+            String initialDateText = this.input.next(); 
+            System.out.print("Informe da data final: ");
+            String finalDateText = this.input.next();
 
-            System.out.println("Informe da data final");
-            System.out.print("Dia: ");
-            int finalDay = this.input.nextInt();
-            System.out.print("Mês: ");
-            int finalMonth = this.input.nextInt();
-            System.out.print("Ano: ");
-            int finalYear = this.input.nextInt();
 
-            // Construtor utilizado para validar as datas inseridas
-            LocalDate validDate = LocalDate.of(initialYear, initialMonth, initialDay);
-            validDate = LocalDate.of(finalYear, finalMonth, finalDay);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate assistentInitialDate = LocalDate.parse(initialDateText, formatter);
+            LocalDate assistentFinalDate = LocalDate.parse(finalDateText, formatter);
 
+
+            Calendar initialDate = Calendar.getInstance();
+            Calendar finalDate = Calendar.getInstance();
             
+
+            initialDate.set(assistentInitialDate.getYear(), assistentInitialDate.getMonthValue() -1, assistentInitialDate.getDayOfMonth());
+            finalDate.set(assistentFinalDate.getYear(), assistentFinalDate.getMonthValue() - 1, assistentFinalDate.getDayOfMonth());
+
+
+
+            List<Activity> activities =  activityController.findByDate(initialDate, finalDate);
+
+            for (Activity activity: activities) {
+                System.out.println(activity.toString());
+                totalEnergyExpense += activity.calculateEnergyExpense();
+                totalWellBeing += activity.calculateWellBeing();
+            }
 
             System.out.println("\n\nGASTO DE ENERGIA TOTAL: " + totalEnergyExpense);
             System.out.println("BEM-ESTAR TOTAL: " + totalWellBeing);

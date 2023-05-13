@@ -90,7 +90,8 @@ public class PhysicalActivityDAO extends ActivityDAO {
             currentPhysicalActivity.setDuration(resultSet.getInt(3));
             currentPhysicalActivity.setSatisfaction(resultSet.getInt(4));
             currentPhysicalActivity.setDescription(resultSet.getString(5));
-            currentPhysicalActivity.setIntensivity(resultSet.getInt(6));
+            currentPhysicalActivity.setOwner(resultSet.getInt(6));
+            currentPhysicalActivity.setIntensivity(resultSet.getInt(7));
 
             physicalActivities.add(currentPhysicalActivity);
         }
@@ -142,7 +143,51 @@ public class PhysicalActivityDAO extends ActivityDAO {
     }
 
     @Override
-    public List<Activity> findByDate(Calendar date01, Calendar date02) throws Exception {
-        return null;
+    public List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
+        List<Activity> activities = new ArrayList<Activity>();
+
+        String sql = """
+                    SELECT
+                    A.COD_ATIVIDADE,
+                    A.DTA_REALIZACAO,
+                    A.VAL_DURACAO,
+                    A.VAL_SATISFACAO,
+                    A.DES_ATIVIDADE,
+                    A.COD_USUARIO,
+                    F.VAL_INTENSIDADE
+                FROM
+                    TAB_ATIVIDADES AS A,
+                    TAB_ATIVIDADES_FISICAS AS F
+                WHERE
+                    A.COD_ATIVIDADE = F.COD_ATIVIDADE
+                    AND A.DTA_REALIZACAO BETWEEN ? AND ?
+                        """;
+
+        PreparedStatement statement = this.connection.prepareStatement(sql);
+
+        statement.setDate(1, new java.sql.Date(initialDate.getTimeInMillis()));
+        statement.setDate(2, new java.sql.Date(finalDate.getTimeInMillis()));
+
+        ResultSet resultSet = statement.executeQuery();
+
+        while(resultSet.next()) {
+            PhysicalActivity currentPhysicalActivity = new PhysicalActivity();
+
+            Calendar calendar = Calendar.getInstance();
+            currentPhysicalActivity.setId(resultSet.getInt(1));
+            calendar.setTime(resultSet.getDate(2));
+            currentPhysicalActivity.setDate(calendar);
+            currentPhysicalActivity.setDuration(resultSet.getInt(3));
+            currentPhysicalActivity.setSatisfaction(resultSet.getInt(4));
+            currentPhysicalActivity.setDescription(resultSet.getString(5));
+            currentPhysicalActivity.setOwner(resultSet.getInt(6));
+            currentPhysicalActivity.setIntensivity(resultSet.getInt(7));
+
+            
+            activities.add(currentPhysicalActivity);
+
+        }
+               
+        return activities;
     }
 }

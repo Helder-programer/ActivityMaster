@@ -25,3 +25,31 @@ Com esse filtro de datas, é possível filtrar por dia, semana, mês e até ano.
 Fontes de pesquisa:
 Utilização da classe LocalDate: Baeldung, Extracting Year, Month and Day from Date in Java, https://www.baeldung.com/java-year-month-day.
 Utilização da classe DateTimeFormatter: StackOverflow, How to format LocalDate object to MM/dd/yyyy and have format persist, https://stackoverflow.com/questions/39689866/how-to-format-localdate-object-to-mm-dd-yyyy-and-have-format-persist.
+
+
+
+
+
+
+
+
+
+
+
+
+Design Patters:
+São princípios criados por grandes programadores 
+que permitem a resolução de problemas comuns e permitem uma melhor manutenção e leitura de código.
+
+
+
+
+
+
+
+
+
+
+
+
+

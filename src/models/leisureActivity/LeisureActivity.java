@@ -59,7 +59,6 @@ public class LeisureActivity extends Activity {
         leisureActivityDAO.delete(this);
     }
 
-
     
     public static List<Activity> findAll() throws Exception {
         List<Activity> activites = leisureActivityDAO.findAll();
@@ -70,6 +69,11 @@ public class LeisureActivity extends Activity {
     public static Activity findById(int id) throws Exception {
         Activity activity = leisureActivityDAO.findById(id);
         return activity;
+    }
+
+    public static List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
+        List<Activity> activites = leisureActivityDAO.findByDate(initialDate, finalDate);
+        return activites;
     }
 
 }
