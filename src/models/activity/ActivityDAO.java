@@ -35,7 +35,7 @@ public abstract class ActivityDAO {
         statement.setInt(3, activity.getDuration());
         statement.setInt(4, activity.getSatisfaction());
         statement.setString(5, activity.getDescription());
-        statement.setInt(6, 1);
+        statement.setInt(6, activity.getOwner());
 
         statement.execute();
         statement.close();
@@ -79,10 +79,6 @@ public abstract class ActivityDAO {
         statement.setInt(1, activity.getId());
         statement.execute();
         statement.close();
-    }
-
-    public void closeConnection() throws Exception {
-        this.connection.close();
     }
 
     public abstract List<Activity> findAll() throws Exception;

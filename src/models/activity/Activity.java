@@ -15,6 +15,7 @@ public abstract class Activity implements Comparable<Activity> {
 
     public abstract double calculateWellBeing();
 
+//TO FIND
     public Activity(int id, Calendar date, int duration, int satisfaction, String description, int owner) throws Exception {
         this.setId(id);
         this.setDate(date);
@@ -23,8 +24,9 @@ public abstract class Activity implements Comparable<Activity> {
         this.setDescription(description);
         this.setOwner(owner);
     }
-
-
+    
+    
+//TO UPDATE
     public Activity(int id, Calendar date, int duration, int satisfaction, String description) throws Exception {
         this.setId(id);
         this.setDate(date);
@@ -36,7 +38,7 @@ public abstract class Activity implements Comparable<Activity> {
 
     public Activity() {}
     
-
+//TO CREATE
     public Activity(Calendar date, int duration, int satisfaction, String description, int owner) throws Exception {
         this.setDate(date);
         this.setDuration(duration);

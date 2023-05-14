@@ -38,6 +38,7 @@ public class UserDAO {
 
             if (isAuthenticated) {
                 user.setId(resultSet.getInt(1));
+
                 return true;
             }
         }

@@ -64,7 +64,7 @@ public class ActivityManager {
                     break;
                 case 7:
                     System.out.println("Saindo...");
-                    this.input.close();
+                    // this.input.close();
                     break;
                 default:
                     System.out.println("informe uma opcao valida");
@@ -73,35 +73,7 @@ public class ActivityManager {
     }
 
     public void init() {
-        try {
-            String message = """
-                    1-Login;
-                    2-Criar Conta;
-                    3-Sair;
-                    """;
-
-            System.out.println(message);
-            int chosenOption = this.input.nextInt();
-
-            switch (chosenOption) {
-                case 1:
-                    this.login();
-                    break;
-                case 2:
-                    this.register();
-                    break;
-                case 3:
-                    System.out.println("Saindo...");
-                    break;
-                default:
-                    System.out.println("Informe uma opcao valida");
-            }
-
-        } catch (Exception error) {
-            System.out.println("Erro: " + error + ". Voltando ao menu...");
-            this.input.nextLine();
-            return;
-        }
+        this.authMenu();
     }
 
     public void login() throws Exception {
@@ -117,9 +89,11 @@ public class ActivityManager {
             System.out.println("Autenticado!");
             this.user = userToLogin;
             this.menu();
+            return;
         }
 
         System.out.println("Usuario e/ou senha incorretos!");
+
     }
 
     public void register() throws Exception {
@@ -131,8 +105,39 @@ public class ActivityManager {
 
         User user = new User(username, password);
 
-        user.save();
-        this.login();
+        userController.register(user);
+    }
+
+    public void authMenu() {
+        int chosenOption = 0;
+        String message = """
+                1-Login;
+                2-Criar Conta;
+                3-Sair;
+                """;
+        while (chosenOption != 3) {
+            try {
+                System.out.println(message);
+                chosenOption = this.input.nextInt();
+                switch (chosenOption) {
+                    case 1:
+                        this.login();
+                        break;
+                    case 2:
+                        this.register();
+                        break;
+                    case 3:
+                        System.out.println("Saindo...");
+                        break;
+                    default:
+                        System.out.println("Informe uma opcao valida");
+                }
+            } catch (Exception error) {
+                System.out.println("Erro: " + error);
+                this.input.nextLine();
+            }
+
+        }
     }
 
     private void addNewActivity() {
@@ -154,6 +159,7 @@ public class ActivityManager {
 
             System.out.println(message);
             activityCategory = this.input.nextInt();
+
             boolean isValidActivitycategory = activityCategory == 1 || activityCategory == 2 || activityCategory == 3;
 
             if (!isValidActivitycategory) {
@@ -213,6 +219,7 @@ public class ActivityManager {
 
     private void showAllActivities() {
         try {
+            System.out.println("SUAS ATIVIDADES");
             List<Activity> activities = activityController.findAll(this.user.getId());
             for (Activity activity : activities) {
                 System.out.println(activity.toString());
@@ -220,7 +227,6 @@ public class ActivityManager {
         } catch (Exception error) {
             System.out.println(error);
         }
-
     }
 
     private void updateActivity() {
@@ -235,6 +241,8 @@ public class ActivityManager {
         try {
             System.out.println("Informe o id da atividade que deseja editar");
             activityId = this.input.nextInt();
+
+            Activity searchedActivity = activityController.findById(activityId, this.user.getId());
 
             System.out.print("Digite a data da atividade: ");
             dateText = this.input.next();
@@ -251,8 +259,6 @@ public class ActivityManager {
             Calendar activityDate = Calendar.getInstance();
             activityDate.set(assistentDate.getYear(), assistentDate.getMonthValue() - 1, assistentDate.getDayOfMonth());
 
-            Activity searchedActivity = activityController.findById(activityId, this.user.getId());
-
             if (searchedActivity instanceof PhysicalActivity) {
                 System.out.print("Informe a intensidade da atividade: ");
                 activityIntensivity = this.input.nextInt();
@@ -262,7 +268,7 @@ public class ActivityManager {
 
                 searchedActivity = physicalActivity;
 
-                activityController.update(searchedActivity, this.user.getId());
+                activityController.update(searchedActivity);
 
             } else
 
@@ -274,10 +280,10 @@ public class ActivityManager {
                         activitySatisfaction, activityDescription, activityDificultity);
                 searchedActivity = workActivity;
 
-                activityController.update(searchedActivity, this.user.getId());
+                activityController.update(searchedActivity);
             } else {
-                activityController.update(searchedActivity, this.user.getId());
-                ;
+                activityController.update(searchedActivity);
+
             }
 
             System.out.println("ATIVIDADE EDITADA COM SUCESSO!");
@@ -295,7 +301,7 @@ public class ActivityManager {
 
             Activity searchedActivity = activityController.findById(activityId, this.user.getId());
 
-            activityController.delete(searchedActivity, this.user.getId());
+            activityController.delete(searchedActivity);
 
             System.out.print("ATIVIDADE REMOVIDA COM SUCESSO!");
         } catch (Exception error) {

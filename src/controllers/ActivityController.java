@@ -16,17 +16,11 @@ public class ActivityController {
         activity.save();
     }
 
-    public void update(Activity activity, int userId) throws Exception {
-        if (!isOwner(activity, userId)) {
-            throw new Exception("Permissao negada");
-        }
+    public void update(Activity activity) throws Exception {
         activity.update();
     }
 
-    public void delete(Activity activity, int userId) throws Exception {
-        if (!isOwner(activity, userId)) {
-            throw new Exception("Permissao negada");
-        }
+    public void delete(Activity activity) throws Exception {
         activity.delete();
     }
 
@@ -47,36 +41,39 @@ public class ActivityController {
 
     public List<Activity> findAll(int userId) throws Exception {
         List<Activity> activities = new ArrayList<Activity>();
+        List<Activity> authenticatedList = new ArrayList<Activity>();
 
         activities.addAll(PhysicalActivity.findAll());
         activities.addAll(LeisureActivity.findAll());
         activities.addAll(WorkActivity.findAll());
 
         for (Activity activity: activities) {
-            if (!isOwner(activity, userId)) activities.remove(activity);
+            if (isOwner(activity, userId)) authenticatedList.add(activity);
         }
 
-        return activities;      
+        return authenticatedList;
     }
 
 
     public List<Activity> findByDate(Calendar initialDate, Calendar finalDate, int userId) throws Exception {
         List<Activity> activities = new ArrayList<Activity>();
+        List<Activity> authenticatedList = new ArrayList<Activity>();
 
         activities.addAll(LeisureActivity.findByDate(initialDate, finalDate));
         activities.addAll(PhysicalActivity.findByDate(initialDate, finalDate));
         activities.addAll(WorkActivity.findByDate(initialDate, finalDate));
 
         for (Activity activity: activities) {
-            if (!isOwner(activity, userId)) activities.remove(activity);
+            if (isOwner(activity, userId)) authenticatedList.add(activity);
         }
 
-        return activities;
+        return authenticatedList;
     }
 
 
     public List<Activity> findByCategory(int activityCategory, int userId) throws Exception {
         List<Activity> activities = new ArrayList<Activity>();
+        List<Activity> authenticatedList = new ArrayList<Activity>();
 
 
         switch (activityCategory) {
@@ -94,19 +91,16 @@ public class ActivityController {
         }
 
         for (Activity activity: activities) {
-            if (!isOwner(activity, userId)) activities.remove(activity);
+            if (isOwner(activity, userId)) authenticatedList.add(activity);
         }
 
-        return activities;
+
+        return authenticatedList;
     }
 
 
     public List<Activity> ranking(int userId) throws Exception {
         List<Activity> activities = this.findAll(userId);       
-         
-        for (Activity activity: activities) {
-            if (!isOwner(activity, userId)) activities.remove(activity);
-        }
 
         Collections.sort(activities);
         Collections.reverse(activities);
@@ -116,7 +110,9 @@ public class ActivityController {
     }
 
     private static boolean isOwner(Activity activity, int userId) throws Exception {
-        if (activity.getOwner() == userId) return true;
+        if (activity.getOwner() == userId) {
+            return true;
+        }
         return false;
     }
 }
