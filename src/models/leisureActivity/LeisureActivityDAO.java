@@ -55,7 +55,8 @@ public class LeisureActivityDAO extends ActivityDAO {
                     TAB_ATIVIDADES_LAZER as L
                 WHERE
                     A.COD_ATIVIDADE = L.COD_ATIVIDADE
-                    ORDER BY A.DTA_REALIZACAO
+                ORDER BY
+                    A.DTA_REALIZACAO DESC
                 """;
 
         PreparedStatement statement = this.connection.prepareStatement(sql);
@@ -113,15 +114,21 @@ public class LeisureActivityDAO extends ActivityDAO {
             searchedLeisureActivity.setDuration(resultSet.getInt(3));
             searchedLeisureActivity.setSatisfaction(resultSet.getInt(4));
             searchedLeisureActivity.setDescription(resultSet.getString(5));
-            searchedLeisureActivity.setOwner((resultSet.getInt(6)));
+            searchedLeisureActivity.setOwner(resultSet.getInt(6));
+
+            resultSet.close();
+            statement.close();
             return searchedLeisureActivity;
         }
+
+        resultSet.close();
+        statement.close();
         return null;
     }
 
     @Override
     public List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
-        List<Activity> activities = new ArrayList<Activity>();
+        List<Activity> leisureActivities = new ArrayList<Activity>();
 
         String sql = """
                     SELECT
@@ -146,7 +153,7 @@ public class LeisureActivityDAO extends ActivityDAO {
 
         ResultSet resultSet = statement.executeQuery();
 
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             LeisureActivity currentLeisureActivity = new LeisureActivity();
 
             Calendar calendar = Calendar.getInstance();
@@ -158,11 +165,13 @@ public class LeisureActivityDAO extends ActivityDAO {
             currentLeisureActivity.setDescription(resultSet.getString(5));
             currentLeisureActivity.setOwner(resultSet.getInt(6));
 
-            
-            activities.add(currentLeisureActivity);
+            leisureActivities.add(currentLeisureActivity);
 
         }
 
-        return activities;
+        resultSet.close();
+        statement.close();
+
+        return leisureActivities;
     }
 }

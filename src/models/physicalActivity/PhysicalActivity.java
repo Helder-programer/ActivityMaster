@@ -32,8 +32,7 @@ public class PhysicalActivity extends Activity {
 
     public void setIntensivity(int intensivity) throws Exception {
         boolean isValidIntensivity = intensivity == 2 || intensivity == 3 || intensivity == 4;
-        if (!isValidIntensivity)
-            throw new Exception("A intensidade so pode ter valor 2, 3 ou 4!");
+        if (!isValidIntensivity) throw new Exception("A intensidade so pode ter valor 2, 3 ou 4!");
         this.intensivity = intensivity;
     }
 

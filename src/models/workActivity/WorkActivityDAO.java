@@ -21,6 +21,7 @@ public class WorkActivityDAO extends ActivityDAO {
     @Override
     public void create(Activity activity) throws Exception {
         super.create(activity);
+
         String sql = "INSERT INTO TAB_ATIVIDADES_TRABALHO (COD_ATIVIDADE, VAL_DIFICULDADE) VALUES (?,?)";
         WorkActivity workActivity = new WorkActivity();
         workActivity = (WorkActivity) activity;
@@ -133,14 +134,20 @@ public class WorkActivityDAO extends ActivityDAO {
             searchedWorkActivity.setDescription(resultSet.getString(5));
             searchedWorkActivity.setOwner(resultSet.getInt(6));
             searchedWorkActivity.setDificultity(resultSet.getInt(7));
+
+            resultSet.close();
+            statement.close();
             return searchedWorkActivity;
         }
+
+        resultSet.close();
+        statement.close();
         return null;
     }
 
     @Override
     public List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
-        List<Activity> activities = new ArrayList<Activity>();
+        List<Activity> workActivities = new ArrayList<Activity>();
 
         String sql = """
                     SELECT
@@ -179,9 +186,12 @@ public class WorkActivityDAO extends ActivityDAO {
             currentWorkActivity.setOwner(resultSet.getInt(6));
             currentWorkActivity.setDificultity(resultSet.getInt(7));
 
-            activities.add(currentWorkActivity);
+            workActivities.add(currentWorkActivity);
         }
 
-        return activities;
+        resultSet.close();
+        statement.close();
+
+        return workActivities;
     }
 }

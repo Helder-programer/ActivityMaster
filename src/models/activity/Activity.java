@@ -126,6 +126,7 @@ public abstract class Activity implements Comparable<Activity> {
         return 0;
     }
 
+    
 
     public abstract void save() throws Exception;
     public abstract void update() throws Exception;

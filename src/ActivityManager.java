@@ -282,8 +282,9 @@ public class ActivityManager {
 
                 activityController.update(searchedActivity);
             } else {
+                LeisureActivity leisureActivity = new LeisureActivity(activityId, activityDate, activityDuration, activitySatisfaction, activityDescription);
+                searchedActivity = leisureActivity;
                 activityController.update(searchedActivity);
-
             }
 
             System.out.println("ATIVIDADE EDITADA COM SUCESSO!");

@@ -11,7 +11,7 @@ import config.ConnectionFactory;
 public abstract class ActivityDAO {
     private Connection connection;
 
-    protected ActivityDAO() {
+    public ActivityDAO() {
         this.connection = ConnectionFactory.getConnection();
     }
 
@@ -50,6 +50,8 @@ public abstract class ActivityDAO {
         while (resultSet.next()) {
             lastID = resultSet.getInt(1);
         }
+
+        resultSet.close();
         return lastID;
     }
 
@@ -83,5 +85,5 @@ public abstract class ActivityDAO {
 
     public abstract List<Activity> findAll() throws Exception;
     public abstract Activity findById(int id) throws Exception;
-    public abstract List<Activity> findByDate(Calendar date01, Calendar date02) throws Exception;
+    public abstract List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception;
 }

@@ -69,8 +69,8 @@ public class PhysicalActivityDAO extends ActivityDAO {
                     A.COD_USUARIO,
                     F.VAL_INTENSIDADE
                 FROM
-                    TAB_ATIVIDADES as A,
-                    TAB_ATIVIDADES_FISICAS as F
+                    TAB_ATIVIDADES AS A,
+                    TAB_ATIVIDADES_FISICAS AS F
                 WHERE
                     A.COD_ATIVIDADE = F.COD_ATIVIDADE
                 ORDER BY
@@ -137,14 +137,21 @@ public class PhysicalActivityDAO extends ActivityDAO {
             searchedPhysicalActivity.setDescription(resultSet.getString(5));
             searchedPhysicalActivity.setOwner((resultSet.getInt(6)));
             searchedPhysicalActivity.setIntensivity(resultSet.getInt(7));
+
+
+            resultSet.close();
+            statement.close();
             return searchedPhysicalActivity;
         }
+
+        resultSet.close();
+        statement.close();
         return null;
     }
 
     @Override
     public List<Activity> findByDate(Calendar initialDate, Calendar finalDate) throws Exception {
-        List<Activity> activities = new ArrayList<Activity>();
+        List<Activity> physicalActivities = new ArrayList<Activity>();
 
         String sql = """
                     SELECT
@@ -184,10 +191,12 @@ public class PhysicalActivityDAO extends ActivityDAO {
             currentPhysicalActivity.setIntensivity(resultSet.getInt(7));
 
             
-            activities.add(currentPhysicalActivity);
+            physicalActivities.add(currentPhysicalActivity);
 
         }
-               
-        return activities;
+
+        resultSet.close();
+        statement.close();
+        return physicalActivities;
     }
 }
