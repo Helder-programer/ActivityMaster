@@ -75,5 +75,4 @@ public class LeisureActivity extends Activity {
         List<Activity> activites = leisureActivityDAO.findByDate(initialDate, finalDate);
         return activites;
     }
-
 }
