@@ -111,6 +111,8 @@ public class ActivityManager {
     public void authMenu() {
         int chosenOption = 0;
         String message = """
+
+                --------------
                 1-Login;
                 2-Criar Conta;
                 3-Sair;

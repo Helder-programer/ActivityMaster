@@ -73,8 +73,6 @@ public class PhysicalActivityDAO extends ActivityDAO {
                     TAB_ATIVIDADES_FISICAS AS F
                 WHERE
                     A.COD_ATIVIDADE = F.COD_ATIVIDADE
-                ORDER BY
-                    A.DTA_REALIZACAO DESC
                 """;
 
         PreparedStatement statement = this.connection.prepareStatement(sql);

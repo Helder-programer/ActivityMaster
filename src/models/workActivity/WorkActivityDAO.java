@@ -71,8 +71,6 @@ public class WorkActivityDAO extends ActivityDAO {
                     TAB_ATIVIDADES_TRABALHO as T
                 WHERE
                     A.COD_ATIVIDADE = T.COD_ATIVIDADE
-                ORDER BY
-                    A.DTA_REALIZACAO DESC
                 """;
 
         PreparedStatement statement = this.connection.prepareStatement(sql);

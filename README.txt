@@ -1,4 +1,4 @@
-***Projeto desenvolvido por Helder Nicollas e Gabriel Dias***
+***Projeto desenvolvido por Helder Nicollas Leão Peixoto, Gabriel Dias, Renata Cristina e Jhonatan Erik***
 
 Diário e Avaliação de Atividades
 

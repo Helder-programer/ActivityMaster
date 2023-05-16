@@ -9,9 +9,12 @@ import models.activity.Activity;
 import models.leisureActivity.LeisureActivity;
 import models.physicalActivity.PhysicalActivity;
 import models.workActivity.WorkActivity;
+import helpers.ActivityHelpers;
 
 
 public class ActivityController {
+    private ActivityHelpers activityHelpers = new ActivityHelpers();
+
     public void create(Activity activity) throws Exception {
         activity.save();
     }
@@ -51,6 +54,8 @@ public class ActivityController {
             if (isOwner(activity, userId)) authenticatedList.add(activity);
         }
 
+        activityHelpers.sortActivitiesByDate(authenticatedList);
+        
         return authenticatedList;
     }
 
@@ -66,6 +71,9 @@ public class ActivityController {
         for (Activity activity: activities) {
             if (isOwner(activity, userId)) authenticatedList.add(activity);
         }
+
+
+        activityHelpers.sortActivitiesByDate(authenticatedList);
 
         return authenticatedList;
     }
@@ -95,6 +103,7 @@ public class ActivityController {
         }
 
 
+        activityHelpers.sortActivitiesByDate(authenticatedList);
         return authenticatedList;
     }
 
@@ -115,4 +124,7 @@ public class ActivityController {
         }
         return false;
     }
+
+
+    
 }
