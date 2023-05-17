@@ -11,7 +11,6 @@ import models.physicalActivity.PhysicalActivity;
 import models.workActivity.WorkActivity;
 import helpers.ActivityHelpers;
 
-
 public class ActivityController {
     private ActivityHelpers activityHelpers = new ActivityHelpers();
 
@@ -55,7 +54,7 @@ public class ActivityController {
         }
 
         activityHelpers.sortActivitiesByDate(authenticatedList);
-        
+
         return authenticatedList;
     }
 

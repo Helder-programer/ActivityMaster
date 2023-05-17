@@ -30,6 +30,7 @@ public abstract class ActivityDAO {
                     """;
 
         PreparedStatement statement = this.connection.prepareStatement(sql);
+        
         statement.setInt(1, this.getLastID() + 1);
         statement.setDate(2, new java.sql.Date(activity.getDateWithoutFormat().getTimeInMillis()));
         statement.setInt(3, activity.getDuration());
