@@ -106,6 +106,7 @@ public class ActivityManager {
         User user = new User(username, password);
 
         userController.register(user);
+        System.out.println("Conta criada com sucesso!");
     }
 
     public void authMenu() {
@@ -152,7 +153,7 @@ public class ActivityManager {
         try {
             String message = """
 
-                    ***Adicionar Nova Atividade***
+                    ---ADICIONAR NOVA ATIVIDADE---
                     Informe qual atividade deseja cadastrar:
                     1-Atividade Física
                     2-Atividade de Lazer
@@ -221,7 +222,7 @@ public class ActivityManager {
 
     private void showAllActivities() {
         try {
-            System.out.println("SUAS ATIVIDADES");
+            System.out.println("---SUAS ATIVIDADES---");
             List<Activity> activities = activityController.findAll(this.user.getId());
             for (Activity activity : activities) {
                 System.out.println(activity.toString());
@@ -368,6 +369,8 @@ public class ActivityManager {
 
             List<Activity> activities = activityController.findByDate(initialDate, finalDate, this.user.getId());
 
+
+            System.out.println("---ATIVIDADES FILTRADAS---");
             for (Activity activity : activities) {
                 System.out.println(activity.toString());
                 totalEnergyExpense += activity.calculateEnergyExpense();
@@ -388,7 +391,7 @@ public class ActivityManager {
         try {
             String message = """
 
-                    ***FILTRO POR CATEGORIA***
+                    ---FILTRO POR CATEGORIA---
                     1-Atividade Física
                     2-Atividade de Lazer
                     3-Atividade de Trabalho
@@ -398,7 +401,7 @@ public class ActivityManager {
 
             List<Activity> searchedActivities = activityController.findByCategory(activityCategory, this.user.getId());
 
-            System.out.println("ATIVIDADES FILTRADAS:\n");
+            System.out.println("---ATIVIDADES FILTRADAS---\n");
             for (Activity activity : searchedActivities) {
                 System.out.println(activity.toString());
             }
@@ -412,7 +415,7 @@ public class ActivityManager {
 
     private void activitiesRanking() {
         try {
-            System.out.println("***ATIVIDADES COM MAIS GASTO DE ENERGIA***");
+            System.out.println("---ATIVIDADES COM MAIS GASTO DE ENERGIA---");
             System.out.println("TOP 3 ATIVIDADES COM MAIS GASTO DE ENERGIA");
 
             List<Activity> activities = activityController.ranking(this.user.getId());
