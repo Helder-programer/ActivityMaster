@@ -14,4 +14,4 @@ As conexões criadas não são fechadas através do método close().
 Resposta para pergunta 3: Sentiu dificuldade para desenvolver o projeto? Quais?
 R_
 O grande obstáculo foi representar no Java a especialização que acontece no banco de dados,
-visto que um objeto é formado sempre pela junção de duas tabelas (TAB_ATIVIDADES + TAB_ATIVIDADES_'TIPO').
+visto que um objeto ATIVIDADE é formado sempre pela junção de duas tabelas (TAB_ATIVIDADES + TAB_ATIVIDADES_'TIPO').
